@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+  <xi:include href="functions.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: ${product.display_name}</title>
+</head>
+
+<body>
+<span py:if="request.identity" py:strip="True">
+    <div py:choose="">
+        <span py:when="request.identity.user.user_id == product.project.user_id">
+            ${project_sidebar()}
+        </span>
+    </div>
+</span>
+
+<div id="content">
+    <div id="product_header">
+        <h1>${product.display_name}</h1> 
+    </div>
+    <div id="project_info">
+        <p>${product.desc}</p><BR />
+        
+        <b>Project:</b> <a href="${tg.url('/project/%s' % product.project.label)}">${product.project.label}</a><BR />
+        <b>Owner:</b> ${product.project.user}<BR />
+        <b>Group:</b> <span py:if="product.project.group">${product.project.group.display_name}</span><BR />
+    </div>
+</div>
+</body>
+</html>

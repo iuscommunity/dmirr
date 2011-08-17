@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: New product</title>
+</head>
+
+<body>
+${project_sidebar()}
+<div id="content">
+    <div id="product_header">
+        <h1>${product.display_name}</h1>
+    </div>
+    <div id="edit_product_form">
+        <form name="edit_product" action="${tg.url('/product/%s?_method=PUT' % product.label)}" method="POST">
+        <table>
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>For Project</label>
+                    </td>
+                    <td>
+                        <input type="hidden" name="project_label" value="${product.project.label}" />
+                        <a href="${tg.url('/project/%s' % product.project.label)}">${product.project.display_name}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Label</label>
+                    </td>
+                    <td>
+                        <input type="text" name="label" value="${product.label}" /> <i>all one word, no spaces though underscores are allowed</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Display Name</label>
+                    </td>
+                    <td>
+                        <input type="text" name="display_name" value="${product.display_name}" size="35" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Description</label>
+                    </td>
+                    <td>
+                        <textarea name="desc" rows="5" cols="64">${product.desc}</textarea>
+                    </td>
+                </tr>
+                <tr><td><br /><br /></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="_submit" value="Save ${product.display_name}" /> <input type="button" name="cancel" value="Cancel" onClick="history.back();"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

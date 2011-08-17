@@ -1,0 +1,37 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+<py:def function="project_product_add_btn()">
+    <span py:if="request.identity" py:strip="True">
+        <div py:choose="">
+            <span py:when="request.identity.user.user_id == project.user_id">
+                <a href="${tg.url('/product/new?project_id=%s' % project.id)}"><img src="${tg.url('/themes/%s/_img/add.png' % tg.config['theme'])}" /></a>
+            </span>
+            <span py:when="project.group in request.identity.user.groups">
+                <a href="${tg.url('/product/new?project_id=%s' % project.id)}"><img src="${tg.url('/themes/%s/_img/add.png' % tg.config['theme'])}" /></a>
+            </span>
+            <span py:when="'dmirr_admin' in request.identity.user.permissions">
+                <a href="${tg.url('/product/new?project_id=%s' % project.id)}"><img src="${tg.url('/themes/%s/_img/add.png' % tg.config['theme'])}" /></a>
+            </span>
+        </div>
+    </span>
+</py:def>
+
+<py:def function="project_release_add_btn()">
+    <span py:if="request.identity" py:strip="True">
+        <div py:choose="">
+            <span py:when="request.identity.user.user_id == project.user_id">
+                <a href="${tg.url('/product_release/new?product_id=%s' % p.id)}">[+]</a>      
+            </span>
+            <span py:when="project.group in request.identity.user.groups">
+                <a href="${tg.url('/product_release/new?product_id=%s' % p.id)}">[+]</a>      
+            </span>
+            <span py:when="'dmirr_admin' in request.identity.user.permissions">
+                <a href="${tg.url('/product_release/new?product_id=%s' % p.id)}">[+]</a>      
+            </span>
+        </div>
+    </span>
+</py:def>
+
+</html>

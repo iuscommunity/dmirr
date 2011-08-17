@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: Delete ${display_name}</title>
+</head>
+
+<body>
+<div id="content">
+    <div id="confirm_delete_form">
+        <h1>Delete Object</h1>
+        <form name="confirm_delete" action="${action}" method="POST">
+        <table>
+            <tr>
+                <td>
+                    <label>Are you sure you want to delete <b>${display_name}</b> and all associated data? This is a permanent action and can not be reversed.</label><BR /><BR />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="confirmed" value="true" /> Yes, delete this item and all associated data!<BR /><BR />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="_submit" value="Continue with delete..." /> <input type="button" name="cancel" value="Cancel" onClick="history.back();"/>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

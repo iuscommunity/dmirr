@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: New Project</title>
+</head>
+
+<body>
+<div id="content">
+    <div id="project_header">
+        <h1>Create a New Mirrored Project</h1>
+    </div>
+    <div id="new_project_form">
+        <form name="new_project" action="${tg.url('/project')}" method="POST">
+        <table>
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>Label</label>
+                    </td>
+                    <td>
+                        <input type="text" name="label" value="${project.label}" /> <i>all one word, no spaces though underscores are allowed</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Display Name</label>
+                    </td>
+                    <td>
+                        <input type="text" name="display_name" value="${project.display_name}" size="35" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Description</label>
+                    </td>
+                    <td>
+                        <textarea name="desc" rows="5" cols="64">${project.desc}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Home Page URL</label>
+                    </td>
+                    <td>
+                        <input type="text" name="url" size="35" value="${project.url}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h2>Upstream Source</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Sync Protocol</label>
+                    </td>
+                    <td>
+                        <select name="sync_protocol">
+                            <span py:for="p in all_protocols">
+                                <div py:choose="">
+                                    <span py:when="project.sync_protocol.id == p.id">
+                                        <option value="${p.label}" selected="true">${p.label}://</option> 
+                                    </span>
+                                    <span py:otherwise="">
+                                        <option value="${p.label}">${p.label}://</option>
+                                    </span>
+                                </div>    
+                            </span>
+                        </select>  <i>protocol to sync from</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Sync Flags</label>
+                    </td>
+                    <td>
+                        <input type="text" name="sync_flags" size="35" value="${project.sync_flags}" /> <i>extra args/options for sync command</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Sync Base Path</label>
+                    </td>
+                    <td>
+                        <input type="text" name="sync_base_path" size="35" value="${project.sync_base_path}" /> <i>path on master server where data starts</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h2>Grant Group Ownership</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Group</label>
+                    </td>
+                    <td>
+                        <select name="group_name">
+                            <option value="dmirr_no_group">No Group Ownership</option>
+                            <span py:for="g in request.identity.user.groups">
+                                <div py:choose="">
+                                    <span py:when="g.group_id == project.group.group_id">
+                                        <option value="${g.group_name}" selected="true">${g.display_name}</option>
+                                    </span>
+                                    <span py:otherwise="">
+                                        <option value="${g.group_name}">${g.display_name}</option>
+                                    </span>
+                                </div>
+                            </span>
+                        </select>
+                    </td>
+                </tr>
+                <tr><td><br /><br /></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="_submit" value="Create Project" /> <input type="button" name="cancel" value="Cancel" onClick="history.back();"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

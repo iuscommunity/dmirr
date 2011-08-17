@@ -1,0 +1,27 @@
+
+<VirtualHost 192.168.1.10:80>
+    ServerName dmirr.example.com
+    DocumentRoot /var/www/vhosts/dmirr.example.com
+
+    WSGIDaemonProcess dmirr user=dmirr group=dmirr display-name=dmirr maximum-requests=1000 processes=4 threads=10
+    WSGIProcessGroup dmirr
+
+    # We'll make the root directory of the domain call the wsgi script
+    WSGIScriptAlias / /var/www/vhosts/dmirr.example.com/dmirr.wsgi  
+
+    # Make the application accessible
+    <Directory '/var/www/vhosts/dmirr.example.com/dmirr'>
+        Order allow,deny
+        Allow from all
+    </Directory>
+ 
+    # We'll need to create exceptions for all static content.
+    # Aliases to serve general project media
+    Alias /themes /var/www/vhosts/dmirr.example.com/dmirr/dmirr/public/themes 
+ 
+    # Make all the static directories accessible
+    <Directory /var/www/vhosts/dmirr.example.com/dmirr/dmirr/public/*>
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>

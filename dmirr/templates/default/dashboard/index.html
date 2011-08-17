@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: My Dashboard</title>
+</head>
+
+<body>
+<div id="content">
+    <div id="project_header">
+        <h1>My Projects</h1> 
+    </div>
+    <div id="project_list">
+        <span py:for="project in all_projects">
+            <ul>
+                <li> <a href="${tg.url('/project/%s' % project.label)}">${project.display_name}</a></li>
+            </ul>
+        </span>
+    </div>
+    
+    <div id="sites_header">
+        <h1>My Sites</h1> 
+    </div>
+    <div id="sites_list">
+        <span py:for="site in all_sites">
+            <ul>
+                <li> <a href="${tg.url('/site/%s' % site.label)}">${site.display_name}</a></li>
+            </ul>
+        </span>
+    </div>
+    
+    <div id="host_header">
+        <h1>My Hosts</h1> 
+    </div>
+    <div id="host_list">
+        <span py:for="host in all_hosts">
+            <ul>
+                <li> <img src="${tg.url('/themes/%s/_img/flags/%s.png' % (tg.config['theme'], host.country_code.lower()))}" /> <a href="${tg.url('/host/%s/' % host.address)}">${host.address}</a>  <i>${host.location}</i></li>
+            </ul>
+        </span>
+    </div>
+    
+    <div id="group_header">
+        <h1>My Groups</h1> 
+    </div>
+    <div id="group_list">
+        <span py:for="group in request.identity.user.groups">
+            <ul>
+                <li> <a href="${tg.url('/group/%s' % group.group_name)}">${group.display_name}</a></li>
+            </ul>
+        </span>
+    </div>
+    
+</div>
+</body>
+</html>

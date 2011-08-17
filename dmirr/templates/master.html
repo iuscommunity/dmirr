@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+    <xi:include href="${tg.config['theme']}/header.html" />
+    <xi:include href="${tg.config['theme']}/sidebars.html" />
+    <xi:include href="${tg.config['theme']}/footer.html" />
+<head py:match="head" py:attrs="select('@*')">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+    <title py:replace="''">dMirr Hub</title>
+    <meta py:replace="select('*')"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/themes/%s/_css/style.css' % tg.config['theme'])}" />
+
+    <script language="javascript">
+        function delete_wrapper(url) {
+            location.href=url;
+        }
+    </script>
+</head>
+
+<body py:match="body" py:attrs="select('@*')">
+  ${header()}
+  <ul id="mainmenu">
+    <li><a href="${tg.url('/project')}" class="${('', 'active')[defined('page') and page==page=='project']}">Mirrored Projects</a></li>
+    <li><a href="${tg.url('/user')}" class="${('', 'active')[defined('page') and page==page=='user']}">Users</a></li>
+    <li><a href="${tg.url('/group')}" class="${('', 'active')[defined('page') and page==page=='group']}">Groups</a></li>
+    <li><a href="${tg.url('/about')}" class="${('', 'active')[defined('page') and page==page=='about']}">About</a></li>
+    <span py:if="tg.auth_stack_enabled" py:strip="True">
+        <li py:if="not request.identity" id="login" class="loginlogout"><a href="${tg.url('/login')}">Login/Register</a></li>
+        <li py:if="request.identity" id="login" class="loginlogout"><a href="${tg.url('/logout_handler')}">Logout</a></li>
+        <li py:if="request.identity" id="dashboard" class="loginlogout"><a href="${tg.url('/dashboard')}" class="${('', 'active')[defined('page') and page==page=='dashboard']}">My Dashboard</a></li>
+    </span>
+  </ul>
+  <div id="content">
+    <!--  
+    <py:if test="defined('page')">
+    <div class="currentpage">
+     Now Viewing: <span py:replace="page"/>
+     </div>
+    </py:if>
+    -->
+    <span py:if="request.identity" py:strip="True">
+        ${navigation_sidebar()}
+    </span>
+
+    <py:with vars="flash=tg.flash_obj.render('flash', use_js=False)">
+        <div py:if="flash" py:content="XML(flash)" />
+    </py:with>
+     <div py:if="defined('errors')">
+        <span py:for="error in errors">
+            <div><div id="flash"><div class="warning">${error} => ${errors[error]}</div></div></div>
+        </span>
+    </div>
+    <div py:replace="select('*|text()')"/>
+    <!-- End of content -->
+    ${footer()}
+  </div>
+</body>
+</html>

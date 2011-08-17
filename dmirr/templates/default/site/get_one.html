@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: ${site.display_name}</title>
+</head>
+
+<body>
+
+${site_sidebar()}
+<div id="content">
+    <div id="site_header">
+        <h1>${site.display_name}</h1> 
+    </div>
+    <div id="site_info">
+        <p>${site.desc}</p>
+        <b>Owner:</b> <a href="${tg.url('/user/%s' % site.user.user_name)}">${site.user}</a><BR />
+        <b>Group:</b> <span py:if="site.group"><a href="${tg.url('/group/%s' % site.group.group_name)}">${site.group.display_name}</a></span><BR />
+        <b>Home Page:</b> <a href="${site.url}">${site.url}</a><BR />
+        <b>Contact Name:</b> ${site.contact_name}<BR />
+        <b>Contact Email:</b> ${site.contact_email}<BR />
+    </div>
+    <div id="downstream_mirrors">
+            <BR />
+            <a name="downstream_mirrors"></a>
+            <h2>Downstream Mirror Servers</h2>
+            <div id="host_list">
+                <ul>
+                    <span py:for="host in site.hosts"> 
+                        <li> <img src="${tg.url('/themes/%s/_img/flags/%s.png' % (tg.config['theme'], host.country_code.lower()))}" /> <a href="${tg.url('/host/%s/' % host.address)}">http://${host.address}${site.sync_base_path}</a> </li>
+                    </span>
+                </ul>
+            </div>
+        </div>
+</div>
+</body>
+</html>

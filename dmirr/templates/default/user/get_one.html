@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>dMirr :: ${user.display_name}'s Profile</title>
+</head>
+
+<body>
+
+${user_sidebar()}
+<h1>${user.display_name}</h1>
+
+<table>
+    <tr>
+        <td><b>Username:</b></td><td>${user.user_name}</td>
+    </tr>
+    <tr>
+        <td><b>Since:</b></td><td>${user.created}</td>
+    </tr>
+    <tr>
+        <td><b>Web URL:</b></td><td><a href="${user.web_url}" target="${user.user_name}_web">${user.web_url}</a></td>
+    </tr>
+    <tr>
+        <td><b>About:</b></td><td>${user.about}</td>
+    </tr>
+</table>
+
+<h2>Group Memberships</h2>
+<ul>
+    <span py:for="group in user.groups">
+        <li><a href="${tg.url('/group/%s' % group.group_name)}">${group.display_name}</a></li>
+    </span>
+</ul>        
+</body>
+</html>
