@@ -1,0 +1,38 @@
+unreleased - v0.4.1dev
+-----------------------------------------------------------------------------
+
+Feature Enhancements:
+
+ -  Re-Releasing under GPL v2
+
+Bug Fixes:
+
+ -  Resolved GitHub Issue #2 500 Internal Server Error - Adding a host that 
+    doesn't have proper DNS
+ -  Resolved GitHub Issue #3 UnicodeDecodeError: 'ascii' codec can't decode 
+    byte 0xe1 in position 49: ordinal not in range(128)
+
+
+Jan 04 2010  - v0.4
+-----------------------------------------------------------------------------
+
+New Features:
+
+ +  Adding 'misc' database table, with 'db_version' as a way of tracking
+    database schema changes.
+ +  Adding this ChangeLog
+ +  Added mirrorlist_max_results to config, limit number of mirrorlist host
+    results by that number.
+ +  Added mirrorlist_expire_time to config to determine how long to keep cache
+    for mirrorlist results.
+ +  Added user and group controllers.
+ +  Overall general cleanup.
+  
+Bug Fixes:
+
+ -  Fixed issue where host/get_one method wasn't functioning
+ 
+Incompatible Changes:
+
+ - This is not a compatible database schema, and because the project is so 
+   young there is no upgrade path from previous version.

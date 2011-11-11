@@ -1,0 +1,19 @@
+NAME: dMirr
+
+CREATOR: BJ Dierkes <wdierkes@rackspace.com>
+
+DESCRIPTION:
+
+dMirr is a distributed mirror server manager. It's purpose is to organize data 
+for upstream projects needing global mirror servers, and the generous sites 
+willing to help mirror those projects.
+
+SUPPORT
+
+    * http://github.com/rackspace/dmirr/issues
+
+
+LICENSE
+
+dMirr is Open Source and is distributed under the GNU GPL v2.  See the 
+LICENSE file included with this software.
