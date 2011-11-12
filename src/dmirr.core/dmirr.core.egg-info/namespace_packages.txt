@@ -1,3 +1,0 @@
-dmirr
-dmirr.hub
-dmirr.cli

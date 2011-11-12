@@ -1,4 +1,0 @@
-
-    [console_scripts]
-    dmirr = dmirr.cli.appmain:main
-    
