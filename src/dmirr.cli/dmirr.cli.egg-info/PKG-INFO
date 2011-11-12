@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: dmirr.cli
+Version: 1.9.1
+Summary: dMirr Command Line Interface
+Home-page: http://github.com/rackspace/dmirr
+Author: BJ Dierkes
+Author-email: wdierkes@rackspace.com
+License: GPLv2
+Description: dMirr Command Line Interface
+Platform: UNKNOWN

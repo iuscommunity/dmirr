@@ -1,0 +1,2 @@
+dmirr
+dmirr.cli
