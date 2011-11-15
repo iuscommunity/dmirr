@@ -5,13 +5,6 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'dmirr.views.home', name='home'),
-    # url(r'^dmirr/', include('dmirr.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'dmirr.hub.apps.base.views.index_view'),
+    url(r'^account/', include('dmirr.hub.apps.accounts.urls')),
 )

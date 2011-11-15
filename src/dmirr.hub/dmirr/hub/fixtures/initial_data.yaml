@@ -1,0 +1,36 @@
+- model: sites.site
+  pk: 1
+  fields:
+      domain: dmirr.com
+      name: dMirr
+                  
+- model: auth.user
+  pk: 1
+  fields:
+      username: admin
+      first_name: Admin
+      last_name: ""
+      is_active: true
+      is_superuser: true
+      is_staff: true
+      last_login: 2008-09-04 14:25:29
+      groups: []
+      user_permissions: []
+      password: sha1$96e7e$fb36818e7582f86952eef1e073c5326513fa2431
+      email: admin@example.com
+      date_joined: 2008-09-04 14:25:29
+      
+- model: userena.userenasignup
+  pk: 1
+  fields:
+      user: 1
+      activation_key: ALREADY_ACTIVATED
+      last_active: 2008-09-04 14:25:29
+      activation_notification_send: false
+
+- model: accounts.userprofile      
+  pk: 1
+  fields:
+      mugshot: ""
+      privacy: registered
+      user: 1
