@@ -181,6 +181,7 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 #GEOS_LIBRARY_PATH = '/home/bob/local/lib/libgeos_c.so'
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
