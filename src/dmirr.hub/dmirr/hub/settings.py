@@ -15,7 +15,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'dmirr_dev.db',
         'USER': '',
@@ -32,6 +32,7 @@ DATABASES = {
 #        'PORT': '3306',
 #    }
 }
+DATABASES['default'] = DATABASES['sqlite']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -195,6 +196,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'dmirr.hub.apps.base',
     'dmirr.hub.apps.accounts',
+    'dmirr.hub.apps.projects'
     )
 
 # A sample logging configuration. The only tangible logging

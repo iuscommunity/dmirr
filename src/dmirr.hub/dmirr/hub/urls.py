@@ -9,6 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'dmirr.hub.apps.base.views.index_view'),
     url(r'^account/', include('dmirr.hub.apps.accounts.urls')),
+    url(r'^projects/', include('dmirr.hub.apps.projects.urls')),
     url(r'^api/', include(v0_api.urls)),
     url(r'^admin/', include(admin.site.urls)),
 )
