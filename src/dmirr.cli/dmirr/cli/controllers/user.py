@@ -2,7 +2,7 @@ from cement2.core import controller
 from dmirr.cli.controllers.base import dMirrBaseController
 from dmirr.core import exc
 
-class dMirrUserController(dMirrBaseController):
+class UserController(dMirrBaseController):
     class meta:
         interface = controller.IController
         label = 'user'

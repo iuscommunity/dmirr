@@ -1,1 +1,11 @@
-{% extends "base_projects.html" %}
+{% extends "projects/base_projects.html" %}
+{% block title %}Create a Project{% endblock %}
+
+{% block content %}
+    <form action="{% url create_project %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+

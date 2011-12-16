@@ -1,0 +1,23 @@
+<html>
+<head>
+    {% block title %}dMirr :: Home{% endblock %}
+</head>
+
+{% block body %}
+<body>
+    {% block header %}
+        <p><a href="{{ url }}">home</a> - <a href="{% url projects_index %}">projects</a> - account</p>
+        {% block subheader %}{% endblock %}
+    {% endblock %}
+    
+    {% block content %}
+        <h1>Welcome to dMirr</h1>
+    {% endblock %}
+    
+    {% block footer %}
+    <p>@copyright 2011 Rackspace Hosting</p>
+    {% endblock %}
+    
+</body>
+{% endblock %}
+    

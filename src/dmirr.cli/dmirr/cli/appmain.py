@@ -6,6 +6,9 @@ from dmirr.core import exc
 
 def main():
     defaults = backend.defaults('dmirr')
+    defaults['base']['hub_baseurl'] = 'http://dmirr.example.com'
+    defaults['base']['hub_api_user'] = 'nobody'
+    defaults['base']['hub_api_key'] = ''
     app = foundation.lay_cement('dmirr', defaults=defaults)
     
     from dmirr.cli.bootstrap import base

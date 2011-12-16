@@ -1,11 +1,9 @@
-from django import forms
+
 from django.forms import ModelForm
-from guardian.shortcuts import assign
-from nf import db
-from django.forms.widgets import CheckboxSelectMultiple
-from nf.apps.projects.models import ProjectShare
+
+from dmirr.hub import db
 
 class ProjectForm(ModelForm):
     class Meta:
         model = db.Project
-        #exclude = ('groups',)
+        exclude = ('groups',)

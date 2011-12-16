@@ -43,7 +43,7 @@ class Project(ProjectBaseModel):
     display_name = models.CharField(max_length=256, blank=False)
     groups = models.ManyToManyField(Group, related_name='projects')
     description = models.TextField(blank=True)
-    url = models.TextField(blank=True)
+    url = models.CharField(max_length=256, blank=True)
     private = models.BooleanField()
     objects = ProjectManager()
         

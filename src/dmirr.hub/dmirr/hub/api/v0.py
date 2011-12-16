@@ -91,6 +91,19 @@ class UserProfileResource(ModelResource):
         # just punt for now
         return object_list
         
+class ProjectResource(ModelResource):
+    owner = fields.ToOneField(UserResource, 'owner', full=True)
+    
+    class Meta:
+        authentication = dMirrAuthentication()
+        authorization = DjangoAuthorization()
+        queryset = db.Project.objects.all()
+        resource_name = 'projects'
+        excludes = []
+        filtering = {}
+        allowed_methods = ['get', 'put', 'post']
+        
 v0_api = Api(api_name='v0')
 v0_api.register(UserResource())
 v0_api.register(UserProfileResource())
+v0_api.register(ProjectResource())
