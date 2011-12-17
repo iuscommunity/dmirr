@@ -1,5 +1,7 @@
 
 from django.contrib.auth.models import User, Group
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext as _
 from django.db import models
 
@@ -19,11 +21,11 @@ class ProjectManager(models.Manager):
             return projects
             
         if only_owned:
-            return self.model.objects.all(owner=request.user)
+            return self.model.objects.all(user=request.user)
         else:
             _projects = self.model.objects.all()
             for project in _projects:
-                if project.owner == request.user:
+                if project.user == request.user:
                     projects.append(project)
                     continue
                     
@@ -38,12 +40,17 @@ class Project(ProjectBaseModel):
     class Meta:
         db_table = 'projects'
             
-    owner = models.ForeignKey(User, related_name='projects')
-    label = models.CharField(max_length=128, blank=False)
-    display_name = models.CharField(max_length=256, blank=False)
+    user = models.ForeignKey(User, related_name='projects')
+    label = models.CharField(max_length=128, blank=False, unique=True)
+    display_name = models.CharField(max_length=256, blank=False, null=False)
     groups = models.ManyToManyField(Group, related_name='projects')
     description = models.TextField(blank=True)
     url = models.CharField(max_length=256, blank=True)
     private = models.BooleanField()
     objects = ProjectManager()
         
+#@receiver(post_save, sender=ProjectItemContribution)
+#def create_allocations_with_contrib(sender, **kw):
+#    # only for new records
+#    if not kw['created']:
+#        return

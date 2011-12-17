@@ -36,3 +36,9 @@ class dMirrInterfaceError(dMirrError):
     def __init__(self, value):
         code = 1040
         dMirrError.__init__(self, value, code)
+    
+class dMirrRequestError(dMirrError):
+    """Interface errors."""
+    def __init__(self, value):
+        code = 1050
+        dMirrError.__init__(self, value, code)

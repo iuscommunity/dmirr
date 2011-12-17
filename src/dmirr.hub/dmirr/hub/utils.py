@@ -9,7 +9,7 @@ Http403 = HttpResponseForbidden()
 
 def session_is_owner(request):
     try:
-        if int(request.POST['owner']) == request.user.id:
+        if int(request.POST['user']) == request.user.id:
             return True
     except ValueError, e:
         return False

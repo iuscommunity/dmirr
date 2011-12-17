@@ -2,6 +2,6 @@
 {% block title %}{{ project.display_name }}{% endblock %}
 
 {% block content %}
-    {{ project.display_name }}
+    {{ project.display_name }} [ <a href="{% url update_project project.id %}">edit</a> | <a href="{% url delete_project project.id %}">delete</a> ]
 {% endblock %}
 

@@ -51,7 +51,7 @@ def update(request, project_id):
         
     data['form'] = form   
     data['project'] = project 
-    return render(request, 'projects/edit.html', data)
+    return render(request, 'projects/update.html', data)
 
 #@login_required
 def show(request, project_id):

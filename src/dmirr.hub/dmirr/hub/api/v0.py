@@ -3,14 +3,25 @@ from django.conf.urls.defaults import url
 
 from tastypie import fields
 from tastypie.authentication import ApiKeyAuthentication
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
+from tastypie.validation import FormValidation
 from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
 from tastypie.api import Api
 from tastypie.utils import trailing_slash
 
 from dmirr.hub import db
- 
+from dmirr.hub.apps.projects.forms import ProjectForm
+         
+class dMirrAuthorization(Authorization):
+    pass
+    #def is_authorized(self, request, object=None):
+    #    print request.user.has_perm('projects.change_project')
+    #    
+    #def apply_limits(self, request, object_list):
+    #    request.user.has_perm('projects.change_project')
+    #    return object_list
+        
 class dMirrAuthentication(ApiKeyAuthentication):
     """
     Similar to APIKeyAuthentication, however uses dmirr_api_user and 
@@ -55,11 +66,14 @@ class dMirrAuthentication(ApiKeyAuthentication):
 
         return res
         
-class UserResource(ModelResource):    
+class dMirrResource(ModelResource):    
+    pass
+
+class UserResource(dMirrResource):    
     class Meta:
         queryset = db.User.objects.all()
         authentication = dMirrAuthentication()
-        authorization = DjangoAuthorization()
+        authorization = dMirrAuthorization()
         resource_name = 'user'
         excludes = ['email', 'password', 'is_active', 'is_staff', 'is_superuser']
         filtering = {}
@@ -75,12 +89,12 @@ class UserResource(ModelResource):
         return object_list
     
         
-class UserProfileResource(ModelResource):
+class UserProfileResource(dMirrResource):
     user = fields.ToOneField(UserResource, 'user', full=True)
     
     class Meta:
         authentication = dMirrAuthentication()
-        authorization = DjangoAuthorization()
+        authorization = dMirrAuthorization()
         queryset = db.UserProfile.objects.all()
         resource_name = 'user_profile'
         excludes = []
@@ -91,17 +105,23 @@ class UserProfileResource(ModelResource):
         # just punt for now
         return object_list
         
-class ProjectResource(ModelResource):
-    owner = fields.ToOneField(UserResource, 'owner', full=True)
+class ProjectResource(dMirrResource):
+    user = fields.ToOneField(UserResource, 'user', full=True)
     
     class Meta:
         authentication = dMirrAuthentication()
-        authorization = DjangoAuthorization()
+        authorization = dMirrAuthorization()
         queryset = db.Project.objects.all()
         resource_name = 'projects'
         excludes = []
         filtering = {}
         allowed_methods = ['get', 'put', 'post']
+        #dvalidation = FormValidation(form_class=ProjectForm)
+        
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<label>[a-zA-Z][\w\d_\.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
         
 v0_api = Api(api_name='v0')
 v0_api.register(UserResource())
