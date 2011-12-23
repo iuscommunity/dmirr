@@ -3,7 +3,7 @@ from dmirr.cli.controllers.base import dMirrBaseController
 from dmirr.core import exc
 
 class UserController(dMirrBaseController):
-    class meta:
+    class Meta:
         interface = controller.IController
         label = 'user'
         description = 'dMirr User Resource Client Interface'

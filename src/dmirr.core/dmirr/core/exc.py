@@ -38,7 +38,13 @@ class dMirrInterfaceError(dMirrError):
         dMirrError.__init__(self, value, code)
     
 class dMirrRequestError(dMirrError):
-    """Interface errors."""
+    """Request errors."""
     def __init__(self, value):
         code = 1050
+        dMirrError.__init__(self, value, code)
+
+class dMirrConnectionError(dMirrError):
+    """Connection errors."""
+    def __init__(self, value):
+        code = 1060
         dMirrError.__init__(self, value, code)

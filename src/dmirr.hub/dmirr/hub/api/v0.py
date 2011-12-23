@@ -3,7 +3,7 @@ from django.conf.urls.defaults import url
 
 from tastypie import fields
 from tastypie.authentication import ApiKeyAuthentication
-from tastypie.authorization import Authorization
+from tastypie.authorization import DjangoAuthorization
 from tastypie.validation import FormValidation
 from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
@@ -13,11 +13,55 @@ from tastypie.utils import trailing_slash
 from dmirr.hub import db
 from dmirr.hub.apps.projects.forms import ProjectForm
          
-class dMirrAuthorization(Authorization):
-    pass
-    #def is_authorized(self, request, object=None):
-    #    print request.user.has_perm('projects.change_project')
-    #    
+class dMirrAuthorization(DjangoAuthorization):
+    def is_authorized(self, request, object=None):
+        # user must be logged in to check permissions
+        # authentication backend must set request.user
+        if not hasattr(request, 'user'):
+            return False
+            
+        # GET is always allowed
+        if request.method == 'GET':
+            return True
+           
+        # Some are ok to POST 
+        ok_to_post = ['projects']
+        
+        if request.method == 'POST' and \
+           self.resource_meta.resource_name in ok_to_post:
+           return True
+           
+        # otherwise do more checks
+        klass = self.resource_meta.object_class
+        
+        # cannot check permissions if we don't know the model
+        if not klass or not getattr(klass, '_meta', None):
+            return True
+        
+        permission_codes = {
+            'POST': '%s.add_%s',
+            'PUT': '%s.change_%s',
+            'DELETE': '%s.delete_%s',
+            }
+
+        # cannot map request method to permission code name
+        if request.method not in permission_codes:
+            return True
+
+        permission_code = permission_codes[request.method] % (
+            klass._meta.app_label,
+            klass._meta.module_name
+            )
+
+        # per obj permission check, if any fail return False
+        for obj in self.resource_meta.queryset:
+            res = request.user.has_perm(permission_code, obj)
+            
+            if not res:
+                return False
+                
+        return True
+        
     #def apply_limits(self, request, object_list):
     #    request.user.has_perm('projects.change_project')
     #    return object_list
@@ -106,7 +150,7 @@ class UserProfileResource(dMirrResource):
         return object_list
         
 class ProjectResource(dMirrResource):
-    user = fields.ToOneField(UserResource, 'user', full=True)
+    owner = fields.ToOneField(UserResource, 'user', full=True)
     
     class Meta:
         authentication = dMirrAuthentication()

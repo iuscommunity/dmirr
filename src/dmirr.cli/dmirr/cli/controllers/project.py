@@ -5,7 +5,7 @@ from dmirr.cli.controllers.base import dMirrBaseController
 from dmirr.core import exc
 
 class ProjectController(dMirrBaseController):
-    class meta:
+    class Meta:
         interface = controller.IController
         label = 'project'
         description = 'dMirr Project Resource Client Interface'
@@ -36,7 +36,7 @@ class ProjectController(dMirrBaseController):
 
     @controller.expose(help="list all projects")
     def listall(self):
-        response, data = self.conn.project.get()
+        response, data = self.hub.project.get()
         for project in data['objects']:
             print project['label']
             
@@ -47,21 +47,24 @@ class ProjectController(dMirrBaseController):
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
-        response, data = self.conn.project.get(self.app.pargs.project)
+        response, data = self.hub.project.get(self.app.pargs.project)
         print data
             
     @controller.expose(help="create a new project")
     def create(self):
+        self.validate_unique_resource('project', self.pargs.label)
+            
+        if not self.app.pargs.user:
+            self.app.pargs.user = self.config.get('base', 'hub_api_user')
+        
+        response, user = self.hub.user.get(self.app.pargs.user)
+
         try:
-            assert self.app.pargs.user, "Project label required."
-            assert self.app.pargs.user, "User label required."
+            assert self.app.pargs.label, "Project label required."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
-        response, user = self.conn.user.get(self.app.pargs.user)
-        if int(response['status']) == 404:
-            raise exc.dMirrArgumentError("User '%s' does not exist." % \
-                                     self.app.pargs.user)
+        response, user = self.hub.user.get(self.app.pargs.user)
         
         project = dict(
             label=self.app.pargs.label,
@@ -70,8 +73,8 @@ class ProjectController(dMirrBaseController):
             private=self.app.pargs.private,
             owner=user['resource_uri'],
             )
-            
-        response, data = self.conn.project.create(params=project)
+        
+        response, data = self.hub.project.create(params=project)
         if int(response['status']) != 201:
             print data['error_message']
 
@@ -79,8 +82,8 @@ class ProjectController(dMirrBaseController):
         
     @controller.expose(help="update an existing project")
     def update(self):
-        response, project = self.conn.project.get(1)
-        self.conn.project.update(project['id'], project)
+        response, project = self.hub.project.get(1)
+        self.hub.project.update(project['id'], project)
         
         
     
