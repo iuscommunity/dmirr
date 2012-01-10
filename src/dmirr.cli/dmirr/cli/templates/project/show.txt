@@ -1,0 +1,12 @@
+
+            ID : ${id}
+         Label : ${label}
+  Display Name : ${display_name}
+   Description : ${description}
+          User : ${user.username}
+  Resource URI : ${resource_uri}
+   Create Date : ${create_date}
+   Update Date : ${update_date}
+           Url : ${url}
+       Private : ${private}
+ 

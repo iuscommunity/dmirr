@@ -20,6 +20,7 @@ setup(name='dmirr.cli',
     test_suite='nose.collector',
     install_requires=[
         "cement2 >= 1.9.3",
+        "cement2.ext.genshi >= 1.9.5",
         ### Required for testing
         # "nose",
         # "coverage",

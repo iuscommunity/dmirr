@@ -7,6 +7,10 @@ from dmirr.core import exc
 
 def main():
     defaults = backend.defaults('dmirr')
+    defaults['base']['extensions'].append('genshi')
+    defaults['base']['output_handler'] = 'genshi'
+    defaults['genshi'] = dict()
+    defaults['genshi']['template_module'] = 'dmirr.cli.templates'
     app = foundation.lay_cement('dmirr', defaults=defaults)
     
     from dmirr.cli.bootstrap import base

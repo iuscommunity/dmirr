@@ -1,0 +1,8 @@
+
+            ID : ${id}
+      Username : ${username}
+    First Name : ${first_name}
+     Last Name : ${last_name}
+    Last Login : ${last_login}
+   Date Joined : ${date_joined}
+  Resource URI : ${resource_uri}

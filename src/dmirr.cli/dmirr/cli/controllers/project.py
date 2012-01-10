@@ -1,10 +1,10 @@
 
 import sys
 from cement2.core import controller
-from dmirr.cli.controllers.base import dMirrBaseController
+from dmirr.cli.controllers.base import dMirrResourceController
 from dmirr.core import exc
 
-class ProjectController(dMirrBaseController):
+class ProjectController(dMirrResourceController):
     class Meta:
         interface = controller.IController
         label = 'project'
@@ -16,7 +16,7 @@ class ProjectController(dMirrBaseController):
             (['--display-name'], 
              dict(action='store', dest='display_name', metavar='TEXT',
                   help='project display name')),
-            (['-d', '--desc'], 
+            (['-d', '--description'], 
              dict(action='store', dest='description', metavar='STR',
                   help='project description')),
             (['--private'], 
@@ -24,66 +24,66 @@ class ProjectController(dMirrBaseController):
                   help='privitization flag (boolean)')),
             (['-u', '--user'], 
              dict(action='store', dest='user', metavar='STR',
-                  help='user label')),
+                  help='user label (username)')),
             (['--url'], 
              dict(action='store', dest='url', metavar='URL',
                   help='full URL path')),
-            (['project'], 
+            (['resource'], 
              dict(action='store', nargs='?',
-                  help='project label to work with')), 
+                  help='resource label to work with')), 
             ]
         defaults = {}
 
-    @controller.expose(help="list all projects")
-    def listall(self):
-        response, data = self.hub.project.get()
-        for project in data['objects']:
-            print project['label']
-            
-    @controller.expose(help="display all project data")
-    def show(self):
-        try:
-            assert self.app.pargs.project, "Project label required."
-        except AssertionError, e:
-            raise exc.dMirrArgumentError, e.args[0]
-            
-        response, data = self.hub.project.get(self.app.pargs.project)
-        print data
-            
+    
     @controller.expose(help="create a new project")
     def create(self):
-        self.validate_unique_resource('project', self.pargs.label)
+        self.validate_unique_resource(self.pargs.label)
             
-        if not self.app.pargs.user:
-            self.app.pargs.user = self.config.get('base', 'hub_api_user')
+        if not self.pargs.user:
+            self.pargs.user = self.config.get('base', 'hub_api_user')
         
-        response, user = self.hub.user.get(self.app.pargs.user)
+        response, user = self.hub.user.get(self.pargs.user)
 
         try:
-            assert self.app.pargs.label, "Project label required."
+            assert self.pargs.label, "Project label required."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
-        response, user = self.hub.user.get(self.app.pargs.user)
+        response, user = self.hub.user.get(self.pargs.user)
         
         project = dict(
-            label=self.app.pargs.label,
-            display_name=self.app.pargs.display_name,
-            description=self.app.pargs.description,
-            private=self.app.pargs.private,
-            owner=user['resource_uri'],
+            label=self.pargs.label,
+            display_name=self.pargs.display_name,
+            description=self.pargs.description,
+            private=self.pargs.private,
+            user=user['resource_uri'],
             )
         
         response, data = self.hub.project.create(params=project)
         if int(response['status']) != 201:
             print data['error_message']
 
-        self.app.log.info("Project %s created." % self.app.pargs.label)
+        self.app.log.info("Project %s created." % self.pargs.label)
         
-    @controller.expose(help="update an existing project")
+    @controller.expose(help="update an existing project resource")
     def update(self):
-        response, project = self.hub.project.get(1)
+        try:
+            assert self.pargs.resource, "Project resource argument required."
+        except AssertionError, e:
+            raise exc.dMirrArgumentError, e.args[0]
+            
+        response, project = self.hub.project.get(self.pargs.resource)
+        project = project.copy()
+        for key in project:
+            if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
+                if key == 'user':
+                    _, user = self.hub.user.get(pargs.user)
+                    project['user'] = user
+                else:
+                    project[key] = getattr(self.pargs, key)
+        
+        # fix things up
+        project['user'] = project['user']['resource_uri']
         self.hub.project.update(project['id'], project)
-        
-        
+      
     
