@@ -221,7 +221,7 @@ class UserResource(dMirrResource):
         queryset = db.User.objects.all()
         authentication = dMirrAuthentication()
         authorization = dMirrAuthorization()
-        resource_name = 'user'
+        resource_name = 'users'
         excludes = ['email', 'password', 'is_active', 'is_staff', 'is_superuser']
         filtering = {}
         allowed_methods = ['get', 'put']
@@ -243,7 +243,7 @@ class UserProfileResource(dMirrResource):
         authentication = dMirrAuthentication()
         authorization = dMirrAuthorization()
         queryset = db.UserProfile.objects.all()
-        resource_name = 'user_profile'
+        resource_name = 'user_profiles'
         excludes = []
         filtering = {}
         allowed_methods = ['get']

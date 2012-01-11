@@ -1,16 +1,22 @@
 
+import os
 import drest
 from cement2.core import backend, foundation
 from cement2.core import exc as cement_exc
 
 from dmirr.core import exc
 
+defaults = backend.defaults('dmirr')
+defaults['base']['extensions'].append('genshi')
+defaults['base']['output_handler'] = 'genshi'
+defaults['genshi'] = dict(
+    template_module='dmirr.cli.templates',
+    )
+defaults['log'] = dict(
+    file=None
+    )
+        
 def main():
-    defaults = backend.defaults('dmirr')
-    defaults['base']['extensions'].append('genshi')
-    defaults['base']['output_handler'] = 'genshi'
-    defaults['genshi'] = dict()
-    defaults['genshi']['template_module'] = 'dmirr.cli.templates'
     app = foundation.lay_cement('dmirr', defaults=defaults)
     
     from dmirr.cli.bootstrap import base
@@ -38,5 +44,14 @@ def main():
     finally:
         app.close()
 
+def test_main(argv=[]):
+    import tempfile
+    app = foundation.lay_cement('dmirr', defaults=defaults, argv=argv)
+    
+    from dmirr.cli.bootstrap import base
+    
+    app.setup()
+    app.run()
+        
 if __name__ == '__main__':
     main()

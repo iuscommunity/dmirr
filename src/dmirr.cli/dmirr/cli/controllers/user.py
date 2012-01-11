@@ -5,7 +5,7 @@ from dmirr.core import exc
 class UserController(dMirrResourceController):
     class Meta:
         interface = controller.IController
-        label = 'user'
+        label = 'users'
         description = 'dMirr User Resource Client Interface'
         arguments = [
             (['resource'], 

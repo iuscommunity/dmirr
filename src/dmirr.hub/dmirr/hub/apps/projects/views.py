@@ -11,7 +11,7 @@ from dmirr.hub.utils import ok, Http403, session_is_owner
 @login_required
 def index(request):
     data = {}
-    data['projects'] = db.Project.objects.by_session(request)
+    data['projects'] = db.Project.objects.all()
     return render(request, 'projects/index.html', data)
     
 @login_required

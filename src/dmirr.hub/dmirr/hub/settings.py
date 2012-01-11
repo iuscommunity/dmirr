@@ -196,7 +196,8 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'dmirr.hub.apps.base',
     'dmirr.hub.apps.accounts',
-    'dmirr.hub.apps.projects'
+    'dmirr.hub.apps.projects',
+    'dmirr.hub.apps.distros',
     )
 
 # A sample logging configuration. The only tangible logging

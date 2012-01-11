@@ -35,7 +35,6 @@ Distributed under the GNU GPL v2 License
 
 
 http://github.com/rackspace/dmirr
-
 """ % (VERSION, CEMENT_VERSION)
     
 class dMirrBaseController(controller.CementBaseController):
@@ -68,8 +67,8 @@ class dMirrBaseController(controller.CementBaseController):
             )
         
         # resources
-        self.hub.add_resource('user')
-        self.hub.add_resource('project', path='/projects')
+        self.hub.add_resource('users')
+        self.hub.add_resource('projects')
         
         # this is only useful in resource controllers
         self.resource = getattr(self.hub, self.Meta.label, None)
@@ -113,7 +112,7 @@ class dMirrResourceController(dMirrBaseController):
         """
         response, data = self.resource.get()
         for obj in data['objects']:
-            if self.Meta.label == 'user':
+            if self.Meta.label == 'users':
                 print obj['username']
             else:
                 print obj['label']
@@ -142,6 +141,6 @@ class dMirrResourceController(dMirrBaseController):
             raise exc.dMirrArgumentError, e.args[0]
 
         if res.lower() in ['yes', 'y', '1']:
-            self.hub.project.delete(self.pargs.resource)
+            self.resource.delete(self.pargs.resource)
             self.log.info("Deleted the %s %s" % \
                          (self.Meta.label, self.pargs.resource))

@@ -1,0 +1,11 @@
+{% extends "distros/base_distros.html" %}
+{% block title %}Create a Distro{% endblock %}
+
+{% block content %}
+    <form action="{% url create_distro %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+

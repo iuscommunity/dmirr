@@ -7,7 +7,7 @@ from dmirr.core import exc
 class ProjectController(dMirrResourceController):
     class Meta:
         interface = controller.IController
-        label = 'project'
+        label = 'projects'
         description = 'dMirr Project Resource Client Interface'
         arguments = [
             (['-l', '--label'], 
@@ -42,14 +42,14 @@ class ProjectController(dMirrResourceController):
         if not self.pargs.user:
             self.pargs.user = self.config.get('base', 'hub_api_user')
         
-        response, user = self.hub.user.get(self.pargs.user)
+        response, user = self.hub.users.get(self.pargs.user)
 
         try:
             assert self.pargs.label, "Project label required."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
-        response, user = self.hub.user.get(self.pargs.user)
+        response, user = self.hub.users.get(self.pargs.user)
         
         project = dict(
             label=self.pargs.label,
@@ -59,7 +59,7 @@ class ProjectController(dMirrResourceController):
             user=user['resource_uri'],
             )
         
-        response, data = self.hub.project.create(params=project)
+        response, data = self.hub.projects.create(params=project)
         if int(response['status']) != 201:
             print data['error_message']
 
@@ -72,18 +72,18 @@ class ProjectController(dMirrResourceController):
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
-        response, project = self.hub.project.get(self.pargs.resource)
+        response, project = self.hub.projects.get(self.pargs.resource)
         project = project.copy()
         for key in project:
             if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
                 if key == 'user':
-                    _, user = self.hub.user.get(pargs.user)
+                    _, user = self.hub.users.get(pargs.user)
                     project['user'] = user
                 else:
                     project[key] = getattr(self.pargs, key)
         
         # fix things up
         project['user'] = project['user']['resource_uri']
-        self.hub.project.update(project['id'], project)
+        self.hub.projects.update(project['id'], project)
       
     

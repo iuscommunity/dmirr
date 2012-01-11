@@ -6,7 +6,7 @@
 {% block body %}
 <body>
     {% block header %}
-        <p><a href="{{ url }}">home</a> - <a href="{% url projects_index %}">projects</a> - account</p>
+        <p><a href="{{ url }}">home</a> - <a href="{% url projects_index %}">projects</a> - <a href="{% url distros_index %}">distros</a> - account</p>
         {% block subheader %}{% endblock %}
     {% endblock %}
     
