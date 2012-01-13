@@ -1,8 +1,10 @@
 
 import os
+import sys
 import drest
-from cement2.core import backend, foundation
+from cement2.core import backend, foundation, handler, log
 from cement2.core import exc as cement_exc
+from cement2.lib.ext_logging import LoggingLogHandler
 
 from dmirr.core import exc
 
@@ -15,11 +17,12 @@ defaults['genshi'] = dict(
 defaults['log'] = dict(
     file=None
     )
-        
+            
 def main():
     app = foundation.lay_cement('dmirr', defaults=defaults)
     
     from dmirr.cli.bootstrap import base
+    handler.register(dMirrLogHandler)
     
     app.setup()
         

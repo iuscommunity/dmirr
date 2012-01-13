@@ -2,6 +2,6 @@
 {% block title %}{{ distro.display_name }}{% endblock %}
 
 {% block content %}
-    {{ distro.display_name }} [ <a href="{% url update_distro distro.id %}">edit</a> | <a href="{% url delete_distro distro.id %}">delete</a> ]
+    {{ distro.display_name }} [ <a href="{% url update_distro project.label distro.label %}">edit</a> | <a href="{% url delete_distro project.label distro.label %}">delete</a> ]
 {% endblock %}
 

@@ -26,7 +26,7 @@ def create(request):
             project = form.save()
             
             return redirect(reverse('show_project',
-                                    kwargs={'project_id': project.id}))                                
+                                    kwargs={'project': project.label}))                                
     else:
         form = ProjectForm()
         
@@ -34,10 +34,10 @@ def create(request):
     return render(request, 'projects/create.html', data)
 
 @login_required
-@ok('projects.change_project', (db.Project, 'id', 'project_id'))
-def update(request, project_id):
+@ok('projects.change_project', (db.Project, 'label', 'project'))
+def update(request, project):
     data = {}
-    project = db.Project.objects.get(pk=project_id)
+    project = db.Project.objects.get(label=project)
     
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
@@ -45,7 +45,7 @@ def update(request, project_id):
             project = form.save()
             
             return redirect(reverse('show_project',
-                                    kwargs={'project_id': project.id}))                                
+                                    kwargs={'project': project.label}))                                
     else:
         form = ProjectForm(instance=project)
         
@@ -54,16 +54,16 @@ def update(request, project_id):
     return render(request, 'projects/update.html', data)
 
 #@login_required
-def show(request, project_id):
+def show(request, project):
     data = {}
-    data['project'] = db.Project.objects.get(pk=project_id)
+    data['project'] = db.Project.objects.get(label=project)
     return render(request, 'projects/show.html', data)
 
 @login_required
-@ok('projects.delete_project', (db.Project, 'id', 'project_id'))
-def delete(request, project_id):
+@ok('projects.delete_project', (db.Project, 'label', 'project'))
+def delete(request, project):
     data = {}
-    project = db.Project.objects.get(pk=project_id)
+    project = db.Project.objects.get(label=project)
     project.delete()
     return redirect('/projects/')
     

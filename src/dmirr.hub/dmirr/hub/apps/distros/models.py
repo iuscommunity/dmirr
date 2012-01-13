@@ -41,6 +41,6 @@ class Distro(DistroBaseModel):
     user = models.ForeignKey(User, related_name='distros')
     label = models.CharField(max_length=128, blank=False, unique=True)
     display_name = models.CharField(max_length=256, blank=False, null=False)
-    distro = models.ForeignKey(Project, blank=False, 
+    project = models.ForeignKey(Project, blank=False, 
                                 related_name='distros')
     objects = DistroManager()

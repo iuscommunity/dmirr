@@ -2,7 +2,7 @@
 {% block title %}Create a Distro{% endblock %}
 
 {% block content %}
-    <form action="{% url create_distro %}" method="POST">
+    <form action="{% url create_distro project.label %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />
