@@ -11,7 +11,7 @@ from dmirr.hub.utils import ok, Http403, session_is_owner
 @login_required
 def index(request):
     data = {}
-    data['projects'] = db.Project.objects.all()
+    data['projects'] = db.Project.objects.order_by('label').all()
     return render(request, 'projects/index.html', data)
     
 @login_required
@@ -28,7 +28,7 @@ def create(request):
             return redirect(reverse('show_project',
                                     kwargs={'project': project.label}))                                
     else:
-        form = ProjectForm()
+        form = ProjectForm(initial=dict(user=request.user))
         
     data['form'] = form    
     return render(request, 'projects/create.html', data)

@@ -2,7 +2,7 @@
 {% block title %}Edit a Project{% endblock %}
 
 {% block content %}
-    [+] <a href="{% url create_distro project.label %}">Create a distro</a></br>
+    [+] <a href="{% url create_repo project.label %}">Create a repo</a></br>
     <form action="{% url update_project project.label %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}

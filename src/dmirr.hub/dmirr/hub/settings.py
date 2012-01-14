@@ -49,7 +49,7 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
-URL = 'http://localhost:8000/'
+URL = 'http://localhost:8001/'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -76,7 +76,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '%sstatic/' % URL
+STATIC_URL = '/static/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
@@ -87,6 +87,7 @@ ADMIN_MEDIA_PREFIX = '%sstatic/admin/' % URL
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'media', 'static/'),
 )
+print STATICFILES_DIRS
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -197,7 +198,8 @@ INSTALLED_APPS = (
     'dmirr.hub.apps.base',
     'dmirr.hub.apps.accounts',
     'dmirr.hub.apps.projects',
-    'dmirr.hub.apps.distros',
+    'dmirr.hub.apps.repos',
+    'dmirr.hub.apps.archs',
     )
 
 # A sample logging configuration. The only tangible logging

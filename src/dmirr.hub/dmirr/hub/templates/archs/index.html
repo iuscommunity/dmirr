@@ -1,0 +1,11 @@
+{% extends "archs/base_archs.html" %}
+{% block title %}dMirr Archs{% endblock %}
+
+{% block content %}
+    {% for arch in archs %}
+        <ul>
+            <li><a href="{% url show_arch arch.label %}">{{ arch.label }}</a></li>
+        </ul>
+    {% endfor %}
+{% endblock %}
+

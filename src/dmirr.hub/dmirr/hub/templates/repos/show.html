@@ -1,0 +1,7 @@
+{% extends "repos/base_repos.html" %}
+{% block title %}{{ repo.display_name }}{% endblock %}
+
+{% block content %}
+    {{ repo.display_name }} [ <a href="{% url update_repo project.label repo.label %}">edit</a> | <a href="{% url delete_repo project.label repo.label %}">delete</a> ]
+{% endblock %}
+

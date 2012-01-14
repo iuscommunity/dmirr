@@ -9,6 +9,7 @@ def template_shortcuts(request):
         'js' : '%sjs/' % settings.STATIC_URL,
         'img' : '%simages/' % settings.STATIC_URL,
         'css' : '%scss/' % settings.STATIC_URL,
+        '3rdparty' : '%s3rdparty/' % settings.STATIC_URL,
         'site' : Site.objects.get_current(),
         }
     return cuts

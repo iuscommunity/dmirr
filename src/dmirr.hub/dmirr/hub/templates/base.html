@@ -1,23 +1,170 @@
-<html>
-<head>
-    {% block title %}dMirr :: Home{% endblock %}
-</head>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}dMirr, Distributed Mirror Server Manager{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-{% block body %}
-<body>
-    {% block header %}
-        <p><a href="{{ url }}">home</a> - <a href="{% url projects_index %}">projects</a> - account</p>
-        {% block subheader %}{% endblock %}
-    {% endblock %}
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link rel="stylesheet" href="{{ 3rdparty }}bootstrap/1.4.0/bootstrap.min.css">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+            }
+        </style>
+
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="{{ img }}favicon.ico">
+        <link rel="apple-touch-icon" href="{{ img }}apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ img }}apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ img }}apple-touch-icon-114x114.png">
+        {% block head %}{% endblock %}
+        
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ 3rdparty }}bootstrap/1.4.0/bootstrap.min.css">
+        
+        <!-- javascript -->
+        <script src="{{ js }}jquery-1.7.1.min.js"></script>
+        <script src="{{ js }}dmirr.core.js"></script>
+        <script src="{{ js }}bootstrap-modal.js"></script>
+    </head>
     
-    {% block content %}
-        <h1>Welcome to dMirr</h1>
-    {% endblock %}
-    
-    {% block footer %}
-    <p>@copyright 2011 Rackspace Hosting</p>
-    {% endblock %}
-    
-</body>
-{% endblock %}
-    
+    <body>
+        <div class="topbar">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="{{ url }}">dMirr //</a>
+                    <ul class="nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                        <p class="pull-right">Logged in as <a href="#">{{ user.get_full_name }}</a> | <a href="{% url userena_signout %}">Logout</a></p>
+                    {% else %}
+                        <!-- <p class="pull-right"><a href="#"><a href="{% url userena_signin %}">Login</a></p> -->
+                        
+                        <!-- Login Modal -->
+                        <div id="signin-modal" class="hide modal">
+                            <div class="modal-header">
+                                <a href="#" class="close">&times;</a>
+                                <h3>Login to dMirr</h3>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    <form action="" method="post" class="form-stacked">
+                                        <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='2e01b049c25e0aa0a8b34ca3f62b95af' /></div>
+                                        <fieldset>
+                                            <legend>Signin</legend>
+                                            <p>
+                                                <label for="id_identification">Email or username</label>
+                                                <input id="id_identification" type="text" class="required" name="identification" maxlength="75" />
+                                            </p>
+                                            <p>
+                                                <label for="id_password">Password</label>
+                                                <input id="id_password" type="password" class="required" name="password" />
+                                            </p>
+                                            <p class="checkbox">
+                                                <label for="id_remember_me"><input id="id_remember_me" type="checkbox" class="required" name="remember_me" /> Remember me for a month</label>
+                                            </p>
+                                        </fieldset>
+                                        <input type="submit" value="Signin" />
+                                        <p class="forgot-password"><a href="/account/password/reset/" title="Forgot your password?">Forgot your password?</a></p>
+                                    </form>
+
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn primary">Primary</a>
+                                <a href="#" class="btn secondary">Secondary</a>
+                            </div>
+                        </div>
+                        <p class="pull-right"><a data-controls-modal="signin-modal" href="javascript:;">Login</a></p>
+                    {% endif %}
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="sidebar">
+                {% block sidebar %}
+                    <div class="well">
+                        <h5>Sidebar</h5>
+                        <ul>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                        </ul>
+                    </div>
+                {% endblock %}
+            </div>
+            
+            <div class="content">
+                {% block content %}
+                    <!-- Main hero unit for a primary marketing message or call to action -->
+                    <div class="hero-unit">
+                        <h1>Hello, world!</h1>
+                        <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+                        <p><a class="btn primary large">Learn more &raquo;</a></p>
+                    </div>
+
+                    <!-- Example row of columns -->
+                    <div class="row">
+                        <div class="span6">
+                            <h2>Heading</h2>
+                            <p>Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                        <div class="span5">
+                            <h2>Heading</h2>
+                            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                        <div class="span5">
+                            <h2>Heading</h2>
+                            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Example row of columns -->
+                    <div class="row">
+                        <div class="span6">
+                            <h2>Heading</h2>
+                            <p>Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                        <div class="span5">
+                            <h2>Heading</h2>
+                            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                        <div class="span5">
+                            <h2>Heading</h2>
+                            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                            <p><a class="btn" href="#">View details &raquo;</a></p>
+                        </div>
+                    </div>
+                {% endblock %}
+
+            
+                <footer>
+                    {% block footer %}
+                        <p>@copyright 2011 Rackspace Hosting</p>
+                    {% endblock %}
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>

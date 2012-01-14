@@ -20,5 +20,5 @@ pushd ./src/dmirr.hub/
     fi
     echo 'no' | python dmirr/hub/manage.py syncdb
     python dmirr/hub/manage.py check_permissions
-    python dmirr/hub/manage.py runserver
+    python dmirr/hub/manage.py runserver 8001
 popd

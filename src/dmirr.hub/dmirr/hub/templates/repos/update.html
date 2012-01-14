@@ -1,0 +1,11 @@
+{% extends "repos/base_repos.html" %}
+{% block title %}Edit {{ repo.display_name }}{% endblock %}
+
+{% block content %}
+    <form action="{% url update_repo project.label repo.label %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+
