@@ -7,8 +7,6 @@ from dmirr.hub import db
 from dmirr.hub.apps.projects.forms import ProjectForm
 from dmirr.hub.utils import ok, Http403, session_is_owner
 
-
-@login_required
 def index(request):
     data = {}
     data['projects'] = db.Project.objects.order_by('label').all()
@@ -53,7 +51,6 @@ def update(request, project):
     data['project'] = project 
     return render(request, 'projects/update.html', data)
 
-#@login_required
 def show(request, project):
     data = {}
     data['project'] = db.Project.objects.get(label=project)

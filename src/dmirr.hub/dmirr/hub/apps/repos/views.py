@@ -33,7 +33,7 @@ def create(request, project):
         if form.is_valid():
             repo = form.save()
             
-            return redirect(reverse('edit_project',
+            return redirect(reverse('show_project',
                                     kwargs=dict(project=repo.project.label)))
     else:
         form = RepoForm(initial=dict(
@@ -57,7 +57,7 @@ def update(request, project, repo):
         if form.is_valid():
             repo = form.save()
             
-            return redirect(reverse('edit_project',
+            return redirect(reverse('show_project',
                                     kwargs=dict(project=repo.project.label)))
     else:
         form = RepoForm(instance=repo)

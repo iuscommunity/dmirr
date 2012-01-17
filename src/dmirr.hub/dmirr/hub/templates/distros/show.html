@@ -1,7 +1,0 @@
-{% extends "distros/base_distros.html" %}
-{% block title %}{{ distro.display_name }}{% endblock %}
-
-{% block content %}
-    {{ distro.display_name }} [ <a href="{% url update_distro project.label distro.label %}">edit</a> | <a href="{% url delete_distro project.label distro.label %}">delete</a> ]
-{% endblock %}
-

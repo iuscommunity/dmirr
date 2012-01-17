@@ -7,10 +7,7 @@
     {% get_obj_perms user for project as "project_perms" %}
 
     {% if "change_project" in project_perms %}
-        <li> <a href="{% url update_project project.label %}">Edit {{ project.display_name }}</a></li>
-    {% endif %}
-    {% if "delete_project" in project_perms %}
-        <li> <a href="{% url delete_project project.label %}">Delete {{ project.display_name }}</a></li>
+        <li> <a href="{% url update_project project.label %}">{{ project.display_name }} Settings</a></li>
     {% endif %}
 {% endblock %}
 
@@ -23,11 +20,11 @@
     <p><b>ID:</b> {{ project.id }}</p>
     <p><b>Website:</b> <a href="{{ project.url }}">{{ project.url }}</a></p>
     
-    <h3>Repositories</h3>
+    <h3>Repositories {% if "change_project" in project_perms %}<a href="{% url create_repo project.label %}" class="add">###</a>{% endif %}</h3>
     <ul>
         {% for repo in project.repos.all %}
             {% if "change_project" in project_perms %}
-                <li> <a href="{% url update_repo project.label repo.label %}">{{ repo.display_name }}</a></li>
+                <li> {{ repo.display_name }} <a href="{% url update_repo project.label repo.label %}" class="update">###</a> <a href="{% url delete_repo project.label repo.label %}" onclick="return confirm('Forever delete {{ repo.label }}?')" class="delete">###</a></li>
             {% else %}
                 <li> {{ repo.display_name }}</li>
             {% endif %}

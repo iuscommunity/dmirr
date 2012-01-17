@@ -8,10 +8,9 @@
     <form action="{% url update_project project.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Save {{ project.display_name }}" class="btn primary"/>
+        <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
     </form>
-    
-    <h3>Project Repositories <small>[+] <a href="{% url create_repo project.label %}">Create a repo</a></small></h3>
     
 {% endblock %}
 

@@ -12,8 +12,33 @@
         <![endif]-->
 
         <!-- Le styles -->
+        <link rel="stylesheet" href="{{ css }}dmirr.css">
         <link rel="stylesheet" href="{{ 3rdparty }}bootstrap/1.4.0/bootstrap.min.css">
         <style type="text/css">
+            a.add {
+                width: 25px;
+                color: transparent;
+                white-space: nowrap;
+                overflow: hidden;
+                background: url('{{ img }}icons/add.png') no-repeat;
+            }
+
+            a.update {
+                width: 25px;
+                color: transparent;
+                white-space: nowrap;
+                overflow: hidden;
+                background: url('{{ img }}icons/bullet_wrench.png') no-repeat;
+            }
+
+            a.delete {
+                width: 25px;
+                color: transparent;
+                white-space: nowrap;    
+                overflow: hidden;
+                background: url('{{ img }}icons/delete.png') no-repeat;
+            }
+
             /* Override some defaults */
             html, body {
                 background-color: #eee;

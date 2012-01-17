@@ -31,6 +31,7 @@ class RepoManager(models.Manager):
 class RepoBaseModel(models.Model):
     class Meta:
         abstract = True
+        ordering = ['label']
         
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True, auto_now=True)             
@@ -38,7 +39,8 @@ class RepoBaseModel(models.Model):
 class Repo(RepoBaseModel):
     class Meta:
         db_table = 'Repos'
-            
+        ordering = ['label']
+          
     user = models.ForeignKey(User)
     label = models.CharField(max_length=128, blank=False, unique=True)
     display_name = models.CharField(max_length=256, blank=False, null=False)

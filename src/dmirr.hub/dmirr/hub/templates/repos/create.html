@@ -5,7 +5,8 @@
     <form action="{% url create_repo project.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Create Repo" class="btn primary"/>
+        <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
     </form>
 {% endblock %}
 
