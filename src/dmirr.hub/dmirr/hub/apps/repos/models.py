@@ -39,7 +39,7 @@ class Repo(RepoBaseModel):
     class Meta:
         db_table = 'Repos'
             
-    user = models.ForeignKey(User, related_name='repos')
+    user = models.ForeignKey(User)
     label = models.CharField(max_length=128, blank=False, unique=True)
     display_name = models.CharField(max_length=256, blank=False, null=False)
     project = models.ForeignKey(Project, blank=False, 

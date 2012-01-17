@@ -1,1 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block content_sidebar %}
+    {% if user.is_authenticated %}
+
+        <h3>Account Navigation</h3>
+        <ul>
+            <li><a href="{% url userena_profile_detail user.username %}">{% trans "View my profile" %}</a></li>
+            <li><a href="{% url userena_profile_edit user.username %}">{% trans "Edit my profile" %}</a></li>
+            <li><a href="{% url userena_password_change user.username %}">{% trans "Change my password" %}</a></li>
+            <li><a href="{% url userena_email_change user.username %}">{% trans "Change my email" %}</a></li>
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -22,7 +22,7 @@ def create(request):
         if form.is_valid():
             arch = form.save()
             
-            return redirect(reverse('show_arch', kwargs=dict(arch=arch.label)))
+            return redirect(reverse('archs_index'))
     else:
         form = ArchForm()
         
@@ -39,7 +39,7 @@ def update(request, arch):
         form = ArchForm(request.POST, instance=arch)
         if form.is_valid():
             arch = form.save()
-            return redirect(reverse('show_arch', kwargs=dict(arch=arch.label)))
+            return redirect(reverse('archs_index'))
     else:
         form = ArchForm(instance=arch)
         
@@ -58,5 +58,5 @@ def delete(request, arch):
     data = {}
     arch = db.Arch.objects.get(label=arch)
     arch.delete()
-    return redirect('/')
+    return redirect(reverse('archs_index'))
     

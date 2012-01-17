@@ -1,11 +1,10 @@
 {% extends "projects/base_projects.html" %}
 {% block title %}dMirr Projects{% endblock %}
 
-{% block content %}
-    {% for project in projects %}
-        <ul>
-            <li><a href="{% url show_project project.label %}">{{ project.display_name }}</a></li>
-        </ul>
-    {% endfor %}
+{% block content_body %}
+    <ul>
+        {% for project in projects %}    
+            <li> <a href="{% url show_project project.label %}">{{ project.display_name }}</a></li>
+        {% endfor %}
+    </uL>
 {% endblock %}
-

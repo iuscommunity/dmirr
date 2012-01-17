@@ -1,7 +1,7 @@
 {% extends "archs/base_archs.html" %}
 {% block title %}{{ arch.label }}{% endblock %}
 
-{% block content %}
+{% block content_body %}
     {{ arch.label }} [ <a href="{% url update_arch arch.label %}">edit</a> | <a href="{% url delete_arch arch.label %}">delete</a> ]
 {% endblock %}
 

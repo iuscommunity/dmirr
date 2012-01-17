@@ -1,12 +1,17 @@
 {% extends "projects/base_projects.html" %}
 {% block title %}Edit a Project{% endblock %}
 
-{% block content %}
-    [+] <a href="{% url create_repo project.label %}">Create a repo</a></br>
-    <form action="{% url update_project project.label %}" method="POST">
+{% block content_title %}<h2>Projects &raquo; {{ project.display_name }}</h2>{% endblock %}
+
+{% block content_body %}
+    <h3>Project Details</h3>
+    <form action="{% url update_project project.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />
     </form>
+    
+    <h3>Project Repositories <small>[+] <a href="{% url create_repo project.label %}">Create a repo</a></small></h3>
+    
 {% endblock %}
 

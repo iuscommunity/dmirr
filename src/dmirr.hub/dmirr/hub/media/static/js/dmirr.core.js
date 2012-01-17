@@ -4,5 +4,6 @@ $(function() {
         keyboard: true,
         backdrop: "static"
     });
+    $('#topbar').dropdown()
 });
 

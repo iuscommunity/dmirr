@@ -3,8 +3,8 @@
 
 {% block title %}{% trans "Signup" %}{% endblock %}
 
-{% block content %}
-<form action="" method="post">
+{% block content_body %}
+<form action="" method="post" class="form-stacked">
   {% csrf_token %}
   <fieldset>
     <legend>Signup</legend>

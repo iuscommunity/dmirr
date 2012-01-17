@@ -1,4 +1,14 @@
 {% extends "base.html" %}
-{% block subheader %}
-    [+] <a href="{% url create_project %}">Create new project</a><br>
+
+{% block content_title %}<h2>Projects</h2>{% endblock %}
+
+{% block content_sidebar %}
+    <h3>Project Navigation</h3>
+    <ul>
+        <li><a href="{% url projects_index %}">List all projects</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url create_project %}">Create a project</a></li>
+        {% endif %}
+        {% block project_nav %}{% endblock %}
+    </ul>
 {% endblock %}

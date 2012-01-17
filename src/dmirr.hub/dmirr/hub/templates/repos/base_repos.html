@@ -1,1 +1,6 @@
-{% extends "base.html" %}
+{% extends "projects/base_projects.html" %}
+
+{% block content_title %}<h2>Projects &raquo; {{ project.display_name }} &raquo; Repos</h2>{% endblock %}
+{% block project_nav %}
+    <li> <a href="{% url show_project project.label %}">Back to {{ project.display_name }}</a></li>
+{% endblock %}

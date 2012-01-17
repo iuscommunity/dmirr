@@ -1,1 +1,10 @@
 {% extends "base.html" %}
+
+{% block content_title %}<h2>Archs</h2>{% endblock %}
+{% block content_sidebar %}
+    <h3>Archs Navigation</h3>
+    <ul>
+        <li><a href="{% url archs_index %}">List all archs</a></li>
+        <li><a href="{% url create_arch %}">Create an arch</a></li>
+    </ul>
+{% endblock %}

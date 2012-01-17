@@ -6,7 +6,7 @@ from userena import views as userena_views
 from dmirr.hub.apps.accounts.forms import dMirrSignupForm
 
 urlpatterns = patterns('dmirr.hub.apps.accounts.views',
-    url(r'^$', 'index_view'),
+    #url(r'^$', 'index_view'),
     #url(r'^post_social_redirect/', 'post_social_redirect_view'),
     #url(r'^social/', include('social_auth.urls')),    
     url(r'^signup/$', userena_views.signup, name='userena_signup', 

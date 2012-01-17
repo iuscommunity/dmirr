@@ -1,14 +1,13 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
 
-{% block content_title %}<h2>{% trans 'Profiles' %}</h2>{% endblock %}
+{% block content_title %}<h2>{% trans 'User Profiles' %}</h2>{% endblock %}
 
-{% block content %}
+{% block content_body %}
 <ul id="profile_list">
   {% for profile in profile_list %}
   <li>
-  <a href="{% url userena_profile_detail profile.user.username %}"><img src="{{ profile.get_mugshot_url }}" /></a>
-  <a href="{% url userena_profile_detail profile.user.username %}">{{ profile.user.username }}</a>
+      <a href="{% url userena_profile_detail profile.user.username %}">{{ profile.user.username }}</a>
   </li>
   {% endfor %}
 

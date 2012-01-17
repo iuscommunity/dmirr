@@ -1,8 +1,10 @@
 {% extends "projects/base_projects.html" %}
 {% block title %}Create a Project{% endblock %}
 
-{% block content %}
-    <form action="{% url create_project %}" method="POST">
+{% block content_title %}<h2>Projects &raquo; Create</h2>{% endblock %}
+    
+{% block content_body %}
+    <form action="{% url create_project %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />

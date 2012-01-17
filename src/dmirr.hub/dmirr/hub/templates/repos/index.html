@@ -1,7 +1,6 @@
 {% extends "repos/base_repos.html" %}
-{% block title %}{{ project.display_name }}'s Repos{% endblock %}
 
-{% block content %}
+{% block content_body %}
     {% for repo in repos %}
         <ul>
             <li><a href="{% url show_repo project.label repo.label %}">{{ repo.display_name }}</a></li>

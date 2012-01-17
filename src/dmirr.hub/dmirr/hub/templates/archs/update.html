@@ -1,8 +1,8 @@
 {% extends "archs/base_archs.html" %}
 {% block title %}Edit an Arch{% endblock %}
 
-{% block content %}
-    <form action="{% url update_arch arch.label %}" method="POST">
+{% block content_body %}
+    <form action="{% url update_arch arch.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" />
