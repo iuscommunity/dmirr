@@ -49,7 +49,7 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
-URL = 'http://localhost:8001/'
+URL = 'http://127.0.0.1:8001/'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -87,7 +87,6 @@ ADMIN_MEDIA_PREFIX = '%sstatic/admin/' % URL
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'media', 'static/'),
 )
-print STATICFILES_DIRS
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -226,7 +225,6 @@ LOGGING = {
 }
 
 try:
-    from dmirr.hub import settings_local
+    from dmirr.hub.settings_local import *
 except ImportError as e:
     pass
-    

@@ -29,5 +29,14 @@
         <p><strong>{% trans "About me" %}</strong><br />{{ profile.about_me }}</p>
         {% endif %}
     </div>
-
+    
+    <div id="groups">
+        <h3>Groups <a href="{% url create_group user.username %}" class="add">###</a></h3>
+        <ul>
+            {% for group in user.groups.all %}
+                <li> {{ group.name }} <a href="{% url update_group user.username group.name %}" class="update">###</a> <a href="{% url delete_group user.username group.name %}" onclick="return confirm('Forever delete {{ repo.label }}?')" class="delete">###</a></li></li>
+            {% endfor %}
+        </ul>
+    </div>
+    
 {% endblock %}
