@@ -43,7 +43,7 @@ class Project(ProjectBaseModel):
     user = models.ForeignKey(User, related_name='projects')
     label = models.CharField(max_length=128, blank=False, unique=True)
     display_name = models.CharField(max_length=256, blank=False, null=False)
-    groups = models.ManyToManyField(Group, related_name='projects')
+    admin_group = models.ForeignKey(Group, related_name='projects', null=True, blank=True)
     description = models.TextField(blank=True)
     url = models.CharField(max_length=256, blank=True)
     private = models.BooleanField()

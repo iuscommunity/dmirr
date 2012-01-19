@@ -13,7 +13,7 @@
     <h3>Users <a href="{% url add_user_to_group user.username group.name %}" class="add">###</a></h3>
     <ul>
         {% for user in group.user_set.all %}
-            <li> {{ user.get_full_name }} <a href="{% url remove_user_from_group user.username group.name %}?user={{ user.username }}" class="delete">###</a></i>
+            <li> {{ user.profile.display_name }} <a href="{% url remove_user_from_group user.username group.name %}?user={{ user.username }}" class="delete">###</a></i>
         {% endfor %}
     </ul>
     

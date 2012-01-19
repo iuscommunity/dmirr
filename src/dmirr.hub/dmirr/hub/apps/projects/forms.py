@@ -2,7 +2,7 @@
 from django import forms
 from django.forms.widgets import HiddenInput
 from django.utils.translation import ugettext_lazy as _
-from guardian.shortcuts import assign
+from guardian.shortcuts import assign, remove_perm
 
 from dmirr.hub import db
 
@@ -13,7 +13,6 @@ ERROR_MSG = 'Label must start with a letter and contain only letters, numbers, d
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = db.Project
-        exclude = ('groups',)
 
     user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
     label = forms.RegexField(regex=LABEL_RE,
@@ -25,4 +24,15 @@ class ProjectForm(forms.ModelForm):
         super(ProjectForm, self).save()
         assign('change_project', self.instance.user, self.instance)
         assign('delete_project', self.instance.user, self.instance)
+        
+        if self.instance.admin_group:
+            assign('change_project', self.instance.admin_group, self.instance)
+            assign('delete_project', self.instance.admin_group, self.instance)
+        
+        if 'admin_group' in self.changed_data and self.initial['admin_group']:
+            # means there was an admin group removed
+            group = db.Group.objects.get(pk=self.initial['admin_group'])
+            remove_perm('change_project', group, self.instance)
+            remove_perm('delete_project', group, self.instance)
+            
         return self.instance
