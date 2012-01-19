@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}{% blocktrans with profile.user.username as username %}{{ username }}'s profile.{% endblocktrans %}{% endblock %}
-{% block content_title %}<h2>Account &raquo; {{ profile.user.username }} {% if profile.user.get_full_name %}({{ profile.user.get_full_name }}){% endif %}</h2>{% endblock %}
+{% block content_title %}<h2>Account &raquo; {{ profile.display_name }}</h2>{% endblock %}
 
 {% block content_body %}
     {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
@@ -34,7 +34,7 @@
         <h3>Groups <a href="{% url create_group user.username %}" class="add">###</a></h3>
         <ul>
             {% for group in user.groups.all %}
-                <li> {{ group.name }} <a href="{% url update_group user.username group.name %}" class="update">###</a> <a href="{% url delete_group user.username group.name %}" onclick="return confirm('Forever delete {{ repo.label }}?')" class="delete">###</a></li></li>
+                <li> {{ group.name }} <a href="{% url update_group user.username group.name %}" class="update">###</a> <a href="{% url delete_group user.username group.name %}" onclick="return confirm('Forever delete {{ group.name }}?')" class="delete">###</a></li></li>
             {% endfor %}
         </ul>
     </div>

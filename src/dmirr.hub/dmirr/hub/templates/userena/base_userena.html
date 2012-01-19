@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block content_title %}<h2>Accounts &raquo; {{ user.get_full_name }}</h2>{% endblock %}
+{% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }}</h2>{% endblock %}
 {% block content_sidebar %}
     {% if user.is_authenticated %}
 

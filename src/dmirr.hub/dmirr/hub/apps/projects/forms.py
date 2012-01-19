@@ -29,7 +29,8 @@ class ProjectForm(forms.ModelForm):
             assign('change_project', self.instance.admin_group, self.instance)
             assign('delete_project', self.instance.admin_group, self.instance)
         
-        if 'admin_group' in self.changed_data and self.initial['admin_group']:
+        if self.initial.has_key('admin_group') and \
+           self.initial['admin_group'] and 'admin_group' in self.changed_data:
             # means there was an admin group removed
             group = db.Group.objects.get(pk=self.initial['admin_group'])
             remove_perm('change_project', group, self.instance)
