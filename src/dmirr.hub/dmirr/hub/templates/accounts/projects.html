@@ -1,0 +1,17 @@
+{% extends 'accounts/base_accounts.html' %}
+
+{% block content_title %}<h2>{{ user.profile.display_name }} // Projects</h2>{% endblock %}
+
+{% block content_body %}
+    <div class="pull-right" style="padding-right: 10px;">
+        <a href="{% url create_project %}" class="btn success">New Project</a>
+    </div>
+
+    <div>
+        <ul>
+            {% for project in user.profile.my_projects %}
+                <li> <a href="{% url show_project project.label %}">{{ project.display_name }}</a> <a href="{% url update_project project.label %}" class="update">###</a>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

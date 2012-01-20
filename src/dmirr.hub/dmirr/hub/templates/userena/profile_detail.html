@@ -7,7 +7,6 @@
 {% block content_body %}
     {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
     
-
     <div id="details">
         <img src="{{ profile.get_mugshot_url }}" alt="{% trans "Your mugshot" %}" />
         {% if profile.user.get_full_name %}
@@ -31,10 +30,10 @@
     </div>
     
     <div id="groups">
-        <h3>Groups <a href="{% url create_group user.username %}" class="add">###</a></h3>
+        <h3>Groups <a href="{% url create_group %}" class="add">###</a></h3>
         <ul>
             {% for group in user.groups.all %}
-                <li> {{ group.name }} <a href="{% url update_group user.username group.name %}" class="update">###</a> <a href="{% url delete_group user.username group.name %}" onclick="return confirm('Forever delete {{ group.name }}?')" class="delete">###</a></li></li>
+                <li> {{ group.name }} <a href="{% url update_group group.name %}" class="update">###</a> <a href="{% url delete_group group.name %}" onclick="return confirm('Forever delete {{ group.name }}?')" class="delete">###</a></li></li>
             {% endfor %}
         </ul>
     </div>

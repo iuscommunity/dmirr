@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content_title %}<h2>Systems</h2>{% endblock %}
+{% block content_sidebar %}
+    <h3>Systems Navigation</h3>
+    <ul>
+        <li><a href="{% url systems_index %}">List all systems</a></li>
+        <li><a href="{% url create_system %}">Create an system</a></li>
+    </ul>
+{% endblock %}

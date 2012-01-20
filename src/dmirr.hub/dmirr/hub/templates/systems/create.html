@@ -1,0 +1,12 @@
+{% extends "systems/base_systems.html" %}
+{% block title %}Create an System{% endblock %}
+
+{% block content_body %}
+    <form action="{% url create_system %}" method="POST" class="form-stacked">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create System" class="btn primary"/>
+        <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
+    </form>
+{% endblock %}
+

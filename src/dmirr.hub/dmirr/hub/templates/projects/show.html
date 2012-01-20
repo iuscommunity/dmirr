@@ -18,7 +18,9 @@
     <h3><b>Description</b></h3>
     <p>{{ project.description }}</p>
     <p><b>ID:</b> {{ project.id }}</p>
-    <p><b>Admin Group:</b> {{ project.admin_group.name }}</p>
+    {% if project.admin_group %}
+        <p><b>Admin Group:</b> <a href="{% url show_group project.admin_group.name %}">{{ project.admin_group.name }}</a></p>
+    {% endif %}
     <p><b>Website:</b> <a href="{{ project.url }}">{{ project.url }}</a></p>
     
     <h3>Repositories {% if "change_project" in project_perms %}<a href="{% url create_repo project.label %}" class="add">###</a>{% endif %}</h3>

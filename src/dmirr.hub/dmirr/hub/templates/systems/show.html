@@ -1,0 +1,7 @@
+{% extends "systems/base_systems.html" %}
+{% block title %}{{ system.label }}{% endblock %}
+
+{% block content_body %}
+    {{ system.label }} [ <a href="{% url update_system system.label %}">edit</a> | <a href="{% url delete_system system.label %}">delete</a> ]
+{% endblock %}
+

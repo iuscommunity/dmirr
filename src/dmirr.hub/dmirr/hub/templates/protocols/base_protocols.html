@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content_title %}<h2>Protocols</h2>{% endblock %}
+{% block content_sidebar %}
+    <h3>Protocols Navigation</h3>
+    <ul>
+        <li><a href="{% url protocols_index %}">List all protocols</a></li>
+        <li><a href="{% url create_protocol %}">Create a protocol</a></li>
+    </ul>
+{% endblock %}

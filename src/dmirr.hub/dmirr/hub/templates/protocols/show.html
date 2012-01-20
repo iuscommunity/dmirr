@@ -1,0 +1,7 @@
+{% extends "protocols/base_protocols.html" %}
+{% block title %}{{ protocol.label }}{% endblock %}
+
+{% block content_body %}
+    {{ protocol.label }} [ <a href="{% url update_protocol protocol.label %}">edit</a> | <a href="{% url delete_protocol protocol.label %}">delete</a> ]
+{% endblock %}
+

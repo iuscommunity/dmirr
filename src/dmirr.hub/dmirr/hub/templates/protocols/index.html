@@ -1,0 +1,11 @@
+{% extends "protocols/base_protocols.html" %}
+{% block title %}dMirr Protocols{% endblock %}
+
+{% block content_body %}
+    <ul>
+        {% for protocol in protocols %}
+            <li> {{ protocol.label }} <a href="{% url update_protocol protocol.label %}" class="update">###</a><a href="{% url delete_protocol protocol.label %}" class="delete" onclick="javascript:return confirm('Forever delete the {{ protocol.label }} protocol?');">delete</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

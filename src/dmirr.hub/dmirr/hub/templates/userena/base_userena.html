@@ -1,11 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }}</h2>{% endblock %}
+{% block content_title %}<h2>Accounts / {{ user.profile.display_name }}</h2>{% endblock %}
 {% block content_sidebar %}
     {% if user.is_authenticated %}
-
-        <h3>Account Navigation</h3>
+        <h3>Navigation</h3>
+            <li><a href="{% url my_projects user.username %}">Manage Projects</a></li>
+            <li><a href="{% url my_systems user.username %}">Manage Systems</a></li>
+            <li><a href="#">Manage Groups</a></li>
+            {% if user.is_superuser %}
+                <li><a href="{% url archs_index %}">Manage Archs</a></li>
+                <li><a href="{% url protocols_index %}">Manage Protocols</a></li>
+            {% endif %}
+            
+        <h3>My Account</h3>
         <ul>
             <li><a href="{% url userena_profile_detail user.username %}">{% trans "View my profile" %}</a></li>
             <li><a href="{% url userena_profile_edit user.username %}">{% trans "Edit my profile" %}</a></li>

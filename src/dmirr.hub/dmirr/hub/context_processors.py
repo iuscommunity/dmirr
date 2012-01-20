@@ -12,6 +12,7 @@ def template_shortcuts(request):
         'css' : '%scss/' % settings.STATIC_URL,
         '3rdparty' : '%s3rdparty/' % settings.STATIC_URL,
         'site' : Site.objects.get_current(),
-        'dmirr_version' : get_distribution('dmirr.hub').version
+        'dmirr_version' : get_distribution('dmirr.hub').version,
+        'flags' : "%simg/flags/" % settings.STATIC_URL,
         }
     return cuts

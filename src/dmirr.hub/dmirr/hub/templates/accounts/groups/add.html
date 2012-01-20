@@ -3,11 +3,12 @@
 {% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }} &raquo; Groups</h2>{% endblock %}
 
 {% block content_body %}
-    <form action="{% url create_group %}" method="POST" class="form-stacked">
+    <h2>{{ group.name }}</h2>
+    <form action="{% url add_user_to_group group.name %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Create Group" class="btn primary"/>
+        <input type="submit" value="Add user to Group" class="btn primary"/>
         <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
-    </form>
+    </form>    
 {% endblock %}
 

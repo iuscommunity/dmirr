@@ -30,6 +30,8 @@ setup(name='dmirr.hub',
         "easy_thumbnails",
         "PIL",
         "django-userena",
+        "pygeoip",
+        "geopy",
         ],
     setup_requires=[
         ],

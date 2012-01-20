@@ -4,7 +4,7 @@
 {% block content_body %}
     <ul>
         {% for arch in archs %}
-            <li> {{ arch.label }} [ <a href="{% url update_arch arch.label %}">edit</a> | <a href="{% url delete_arch arch.label %}">delete</a> ]</li>
+            <li> {{ arch.label }} <a href="{% url update_arch arch.label %}" class="update">###</a><a href="{% url delete_arch arch.label %}" class="delete" onclick="javascript:return confirm('Forever delete the {{ arch.label }} arch?');">###</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

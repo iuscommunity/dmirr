@@ -199,6 +199,8 @@ INSTALLED_APPS = (
     'dmirr.hub.apps.projects',
     'dmirr.hub.apps.repos',
     'dmirr.hub.apps.archs',
+    'dmirr.hub.apps.protocols',
+    'dmirr.hub.apps.systems',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -224,6 +226,8 @@ LOGGING = {
     }
 }
 
+GEOIP_DATA_FILE = os.path.join(os.path.dirname(__file__), 'GeoIP.dat')
+GEO_CITY_FILE = os.path.join(os.path.dirname(__file__), 'GeoLiteCity.dat')
 try:
     from dmirr.hub.settings_local import *
 except ImportError as e:
