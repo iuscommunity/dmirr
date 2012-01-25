@@ -21,11 +21,25 @@ class UserProfile(UserenaBaseProfile):
             return self.user.username
 
     @property
-    def my_projects(self):
+    def projects(self):
         set = get_objects_for_user(self.user, 'projects.change_project')
         return set
     
     @property
-    def my_systems(self):
+    def systems(self):
         set = get_objects_for_user(self.user, 'systems.change_system')
         return set
+
+    @property
+    def managed_groups(self):
+        set = get_objects_for_user(self.user, 'auth.change_group')
+        return set
+    
+    @property
+    def unmanaged_groups(self):
+        set = []
+        for group in self.user.groups.all():
+            if group not in self.managed_groups:
+                set.append(group)
+        return set
+    

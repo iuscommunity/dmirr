@@ -2,11 +2,19 @@
 {% block title %}Edit an Arch{% endblock %}
 
 {% block content_body %}
+    <h3>Settings</h3>
     <form action="{% url update_arch arch.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save Arch" class="btn primary"/>
         <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
     </form>
+
+    <!-- FIX ME need a call out warning block -->
+    <div id="delete-box">
+        <h3>Arch Deletion</h3>
+        <p>If you are absolutely sure that you want to delete {{ arch.label }} and <b>all of its associated data</b>, do so by clicking the big scary red button.</p>
+        <p style="padding-right: 10px;"><a href="{% url delete_arch arch.label %}" class="btn danger pull-right" onclick="javascript:return confirm('Forever delete {{ arch.label }}?');">Delete Arch</a></p>
+    </div>
 {% endblock %}
 

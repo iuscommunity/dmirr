@@ -1,13 +1,13 @@
 {% extends 'accounts/base_accounts.html' %}
 
-{% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }} &raquo; Groups</h2>{% endblock %}
+{% block content_title %}<h2>{{ user.profile.display_name }} // Groups</h2>{% endblock %}
 
 {% block content_body %}
-    <h2>{{ group.name }} <small><a href="{% url update_group group.name %}" class="update">###</a> <a href="{% url delete_group group.name %}" onclick="return confirm('Forever delete {{ group.name }}?')" class="delete">###</a></small></h2>
-    <h3>Users <a href="{% url add_user_to_group group.name %}" class="add">###</a></h3>
+    <h3>{{ group.name }} <small><a href="{% url update_group group.id %}" class="update">###</a></small></h3>
+    <h4>Users {% if group in user.profile.managed_groups %}<a href="{% url add_user_to_group group.id %}" class="add">###</a>{% endif %}</h4>
     <ul>
         {% for user in group.user_set.all %}
-            <li> {{ user.profile.display_name }} <a href="{% url remove_user_from_group group.name %}?user={{ user.username }}" class="delete">###</a></i>
+            <li> {{ user.profile.display_name }} {% if group in user.profile.managed_groups %}<a href="{% url remove_user_from_group group.id %}?user={{ user.username }}" class="delete">###</a>{% endif %}</i>
         {% endfor %}
     </ul>
     

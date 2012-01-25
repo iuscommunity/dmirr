@@ -14,7 +14,6 @@ def index(request):
     return render(request, 'systems/index.html', data)
     
 @login_required
-@ok('systems.create_system')
 def create(request):
     data = {}
     if request.method == 'POST':
@@ -22,9 +21,10 @@ def create(request):
         if form.is_valid():
             system = form.save()
             
-            return redirect(reverse('systems_index'))
+            return redirect(reverse('show_system', 
+                            kwargs=dict(system=system.label)))
     else:
-        form = SystemForm()
+        form = SystemForm(initial=dict(user=request.user))
         
     data['form'] = form    
     return render(request, 'systems/create.html', data)
@@ -39,7 +39,8 @@ def update(request, system):
         form = SystemForm(request.POST, instance=system)
         if form.is_valid():
             system = form.save()
-            return redirect(reverse('systems_index'))
+            return redirect(reverse('show_system', 
+                            kwargs=dict(system=system.label)))
     else:
         form = SystemForm(instance=system)
         

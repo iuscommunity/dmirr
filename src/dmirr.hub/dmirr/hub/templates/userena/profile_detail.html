@@ -29,13 +29,4 @@
         {% endif %}
     </div>
     
-    <div id="groups">
-        <h3>Groups <a href="{% url create_group %}" class="add">###</a></h3>
-        <ul>
-            {% for group in user.groups.all %}
-                <li> {{ group.name }} <a href="{% url update_group group.name %}" class="update">###</a> <a href="{% url delete_group group.name %}" onclick="return confirm('Forever delete {{ group.name }}?')" class="delete">###</a></li></li>
-            {% endfor %}
-        </ul>
-    </div>
-    
 {% endblock %}

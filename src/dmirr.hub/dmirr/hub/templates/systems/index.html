@@ -1,11 +1,16 @@
 {% extends "systems/base_systems.html" %}
-{% block title %}dMirr Systems{% endblock %}
+{% block content_title %}<h2>{{ user.profile.display_name }} // Systems</h2>{% endblock %}
 
 {% block content_body %}
-    <ul>
-        {% for system in systems %}
-            <li> <img src="{{ flags }}{{ system.country_code }}.png"></a> <a href="{% url show_system system.label %}">{{ system }}</a> <a href="{% url update_system system.label %}" class="update">###</a><a href="{% url delete_system system.label %}" class="delete" onclick="javascript:return confirm('Forever delete the {{ system.label }} system?');">###</a></li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+    <div class="pull-right" style="padding-right: 10px;">
+        <a href="{% url create_system %}" class="btn success">New System</a>
+    </div>
 
+    <div>
+        <ul>
+            {% for system in user.profile.systems %}
+                <li> <a href="{% url show_system system.label %}">{{ system.label }}</a> <a href="{% url update_system system.label %}" class="update">###</a>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

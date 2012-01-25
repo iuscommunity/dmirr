@@ -16,7 +16,7 @@
     <div id="delete-box">
         <h3>Project Deletion</h3>
         <p>If you are absolutely sure that you want to delete {{ project.display_name }} and <b>all of its associated data</b>, do so by clicking the big scary red button.</p>
-        <p><a href="{% url delete_project project.label %}" class="btn danger pull-right" onclick="javascript:return confirm('Forever delete {{ project.display_name }}?');">Delete Project</a></p>
+        <p style="padding-right: 10px;"><a href="{% url delete_project project.label %}" class="btn danger pull-right" onclick="javascript:return confirm('Forever delete {{ project.display_name }}?');">Delete Project</a></p>
     </div>
 {% endblock %}
 

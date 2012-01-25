@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.contrib.auth.models import User, Group
 from django.core.validators import ValidationError
 import socket
 
@@ -16,6 +17,9 @@ class System(models.Model):
         db_table = 'systems'
         ordering = ['label']
         
+    user = models.ForeignKey(User, related_name='systems')
+    admin_group = models.ForeignKey(Group, related_name='systems', null=True, blank=True)
+    
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True, auto_now=True)                     
     label = models.CharField(max_length=128, blank=False, unique=True, validators=[hostname_resolves])

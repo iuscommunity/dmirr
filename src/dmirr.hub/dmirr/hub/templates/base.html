@@ -105,6 +105,8 @@
             <div class="topbar-inner">
                 <div class="container-fluid">
                     <ul>
+                        <a href="{{ baseurl }}" class="brand">dMirr //</a>
+                        <!--
                         <li class="dropdown" data-dropdown="dropdown" >
                             <a href="#" class="dropdown-toggle brand">dMirr //</a>
                             <ul class="dropdown-menu">
@@ -124,6 +126,7 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        -->
                     </ul>
                     {% if user.is_authenticated %}
                         <p class="pull-right">Logged in as <a href="{% url userena_profile_detail user.username %}">{{ user.profile.display_name }}</a> | <a href="{% url userena_signout %}">Logout</a></p>

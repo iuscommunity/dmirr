@@ -1,0 +1,29 @@
+{% extends 'accounts/base_accounts.html' %}
+
+{% block content_title %}<h2>{{ user.profile.display_name }} // Groups</h2>{% endblock %}
+
+{% block content_body %}
+    <div class="pull-right" style="padding-right: 10px;">
+        <a href="{% url create_group %}" class="btn success">New Group</a>
+    </div>
+
+    <div>
+        {% if user.profile.managed_groups %}
+            <h3>Groups You Manage:</h2>
+            <ul>
+                {% for group in user.profile.managed_groups.all %}
+                    <li> <a href="{% url show_group group.id %}">{{ group.name }}</a> <a href="{% url update_group group.id %}" class="update">###</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    
+        {% if user.profile.unmanaged_groups %}
+            <h3>Non-Managed Groups You Are Associated With:</h2>
+            <ul>
+                {% for group in user.profile.unmanaged_groups.all %}                
+                    <li> <a href="{% url show_group group.id %}">{{ group.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

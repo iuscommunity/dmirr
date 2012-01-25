@@ -1,10 +1,10 @@
 {% extends 'accounts/base_accounts.html' %}
 
-{% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }} &raquo; Groups</h2>{% endblock %}
+{% block content_title %}<h2>{{ user.profile.display_name }} // Groups</h2>{% endblock %}
 
 {% block content_body %}
     <h2>{{ group.name }}</h2>
-    <form action="{% url add_user_to_group group.name %}" method="POST" class="form-stacked">
+    <form action="{% url add_user_to_group group.id %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Add user to Group" class="btn primary"/>

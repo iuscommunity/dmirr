@@ -22,7 +22,6 @@ def main():
     app = foundation.lay_cement('dmirr', defaults=defaults)
     
     from dmirr.cli.bootstrap import base
-    handler.register(dMirrLogHandler)
     
     app.setup()
         

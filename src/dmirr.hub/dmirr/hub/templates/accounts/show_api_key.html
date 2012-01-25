@@ -1,0 +1,15 @@
+{% extends 'accounts/base_accounts.html' %}
+
+{% block content_title %}<h2>{{ user.profile.display_name }} // API Access</h2>{% endblock %}
+
+{% block content_body %}
+    <div class="pull-right" style="padding-right: 10px;">
+        <a href="{% url reset_api_key user.username %}" class="btn danger" onclick="javascript:return confirm('All apps using the current key will need to be updated.  Continue?');">Reset API Key</a>
+    </div>
+
+    <div class="span6">
+        <p><b>API Key:</b> </p>
+        <p><pre align="middle">{{ user.api_key.key }}</pre></p>
+
+    </div>
+{% endblock %}

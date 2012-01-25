@@ -1,6 +1,6 @@
 {% extends 'accounts/base_accounts.html' %}
 
-{% block content_title %}<h2>Accounts &raquo; {{ user.profile.display_name }} &raquo; Groups</h2>{% endblock %}
+{% block content_title %}<h2>{{ user.profile.display_name }} // Groups</h2>{% endblock %}
 
 {% block content_body %}
     <form action="{% url create_group %}" method="POST" class="form-stacked">

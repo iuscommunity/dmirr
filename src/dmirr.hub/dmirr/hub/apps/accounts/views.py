@@ -1,5 +1,5 @@
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from dmirr.hub.apps.accounts.forms import GroupForm, AddUserToGroupForm
@@ -19,6 +19,36 @@ def my_projects(request, user):
     return render(request, 'accounts/projects.html', data)
     
 @login_required
+@ok('auth.change_user', (db.User, 'username', 'user'))
+def show_api_key(request, user):
+    data = {}
+    user = get_object_or_404(db.User, username=user)
+    data['profile'] = user.profile
+    data['user'] = user
+    return render(request, 'accounts/show_api_key.html', data)
+
+@login_required
+@ok('auth.change_user', (db.User, 'username', 'user'))
+def reset_api_key(request, user):
+    data = {}
+    user = get_object_or_404(db.User, username=user)
+    if user.api_key:
+        user.api_key.key = user.api_key.generate_key()
+        user.api_key.save()
+    else:
+        key = db.ApiKey(user=user)
+        key.save
+        
+    data['profile'] = user.profile
+    data['user'] = user
+    return redirect(reverse('show_api_key', kwargs={'user': user.username}))
+    
+@login_required
+def groups_index(request):
+    data = {}
+    return render(request, 'accounts/groups/index.html', data)
+    
+@login_required
 def create_group(request):
     data = {}
 
@@ -27,10 +57,9 @@ def create_group(request):
         post['user'] = request.user
         form = GroupForm(post)
         if form.is_valid():
-            group = form.save()
-            
-            return redirect(reverse('userena_profile_detail',
-                                    kwargs=dict(username=request.user.username)))
+            group = form.save()            
+            return redirect(reverse('show_group', 
+                                    kwargs=dict(group=group.id)))
     else:
         form = GroupForm()
         
@@ -38,10 +67,10 @@ def create_group(request):
     return render(request, 'accounts/groups/create.html', data)
     
 login_required
-@ok('auth.change_group', (db.Group, 'name', 'group'))
+@ok('auth.change_group', (db.Group, 'pk', 'group'))
 def update_group(request, group):
     data = {}
-    group = db.Group.objects.get(name=group)
+    group = db.Group.objects.get(pk=group)
     
     if request.method == 'POST':
         post = request.POST.copy()
@@ -49,9 +78,8 @@ def update_group(request, group):
         form = GroupForm(post, instance=group)
         if form.is_valid():
             group = form.save()
-            
-            return redirect(reverse('userena_profile_detail',
-                                    kwargs=dict(username=request.user.username)))
+            return redirect(reverse('show_group', 
+                                    kwargs=dict(group=group.id)))
     else:
         form = GroupForm(instance=group)
         
@@ -59,39 +87,17 @@ def update_group(request, group):
     data['group'] = group 
     return render(request, 'accounts/groups/update.html', data)
 
-login_required
-@ok('auth.change_group', (db.Group, 'name', 'group'))
-def update_group(request, group):
-    data = {}
-    group = db.Group.objects.get(name=group)
-
-    if request.method == 'POST':
-        post = request.POST.copy()
-        post['user'] = request.user
-        form = GroupForm(post, instance=group)
-        if form.is_valid():
-            group = form.save()
-            
-            return redirect(reverse('show_group', 
-                                    kwargs=dict(group=group.name)))
-    else:
-        form = GroupForm(instance=group)
-          
-    data['form'] = form
-    data['group'] = group 
-    return render(request, 'accounts/groups/update.html', data)
-
 @login_required
-@ok('auth.change_group', (db.Group, 'name', 'group'))
+@ok('auth.change_group', (db.Group, 'id', 'group'))
 def add_user_to_group(request, group):
     data = {}
-    group = db.Group.objects.get(name=group)    
+    group = db.Group.objects.get(pk=group)    
     
     if request.method == 'POST':
         user = db.User.objects.get(pk=request.POST['user'])
         group.user_set.add(user)
         group.save()
-        return redirect(reverse('show_group', kwargs=dict(group=group.name)))
+        return redirect(reverse('show_group', kwargs=dict(group=group.id)))
         
     else:
         form = AddUserToGroupForm()
@@ -100,28 +106,27 @@ def add_user_to_group(request, group):
         return render(request, 'accounts/groups/add.html', data)
 
 @login_required
-@ok('auth.change_group', (db.Group, 'name', 'group'))
+@ok('auth.change_group', (db.Group, 'pk', 'group'))
 def remove_user_from_group(request, group):
     data = {}
-    group = db.Group.objects.get(name=group)    
+    group = db.Group.objects.get(pk=group)    
     user = db.User.objects.get(username=request.GET['user'])
 
     group.user_set.remove(user)
     group.save()
-    return redirect(reverse('show_group', kwargs=dict(group=group.name)))
+    return redirect(reverse('show_group', kwargs=dict(group=group.id)))
 
         
 def show_group(request, group):
     data = {}
-    data['group'] = db.Group.objects.get(name=group)
+    data['group'] = db.Group.objects.get(pk=group)
     return render(request, 'accounts/groups/show.html', data)
 
 @login_required
-@ok('auth.delete_group', (db.Group, 'name', 'group'))
+@ok('auth.delete_group', (db.Group, 'pk', 'group'))
 def delete_group(request, group):
     data = {}
-    group = db.Group.objects.get(name=group)
+    group = db.Group.objects.get(pk=group)
     group.delete()
-    return redirect(reverse('userena_profile_detail',
-                            kwargs=dict(username=request.user.username)))
+    return redirect(reverse('groups_index'))
     

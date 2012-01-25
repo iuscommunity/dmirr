@@ -24,12 +24,6 @@ class AddUserToGroupForm(forms.Form):
     user = forms.ModelChoiceField(queryset=db.User.objects.all())                           
     
 class GroupForm(forms.ModelForm):
-    name = forms.RegexField(regex=USERNAME_RE,
-                            max_length=32,
-                            widget=forms.TextInput(attrs=ATTRS_DICT),
-                            label=_("Name"),
-                            error_messages={'invalid': _(GROUP_ERROR_MSG)})
-                            
     class Meta:
         model = db.Group
         exclude = ['permissions']
