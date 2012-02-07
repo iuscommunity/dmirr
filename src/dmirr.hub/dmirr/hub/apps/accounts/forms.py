@@ -7,7 +7,7 @@ from guardian.shortcuts import assign
 from dmirr.hub import db
 
 ATTRS_DICT = {'class': 'required'}
-USERNAME_RE = r'^[a-zA-Z][\.\w\-]+$'
+USERNAME_RE = r'^[a-zA-Z][\.\w\d\-\_]+$'
 ERROR_MSG = 'Username must start with a letter and contain only letters, numbers, dots, dashes, and underscores.'
 GROUP_ERROR_MSG = 'Group name must start with a letter and contain only letters, numbers, dots, dashes, and underscores.'
 

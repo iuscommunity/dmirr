@@ -3,5 +3,45 @@
 
 {% block content_body %}
     <h3>{{ system.label }} <a href="{% url update_system system.label %}" class="update">###</a></h3>
+    <table>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>ID:</td><td>{{ system.id }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Owner:</td><td><a href="{% url userena_profile_detail system.user.username %}">{{ system.user.profile.display_name }}</a></td>
+        </tr>
+        {% if system.admin_group %}
+            <tr valign='top' class='table table-striped'>
+                <td align='right' width='100'>Admin Group:</td><td><a href="{% url show_group system.admin_group.id %}">{{ system.admin_group.name }}</a></td>
+            </tr>
+        {% endif %}
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>IP Addr:</td><td>{{ system.ip }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Latitude:</td><td>{{ system.latitude }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Longitude:</td><td>{{ system.longitude }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>City:</td><td>{{ system.city }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Region:</td><td>{{ system.region }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Postal Code:</td><td>{{ system.postal_code }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Country:</td><td>{{ system.country }} ( {{ system.country_code }} ) <img src="{{ flags }}{{ system.country_code }}.png"></td>
+        </tr>
+    </table>
+    <h3>Project Resources <a href="{% url create_system_resource system.label %}" class="add">###</a></h3> 
+    <ul>
+        {% for resource in system.resources.all %}
+            <li> {{ resource.protocol }}://{{ resource.system.label }}{{ resource.path }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 

@@ -4,7 +4,7 @@ from django.forms.models import ModelChoiceField
 
 from tastypie import fields
 from tastypie.authentication import ApiKeyAuthentication
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
 from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
@@ -87,130 +87,24 @@ class dMirrValidation(FormValidation):
         return form.errors
            
 
-class dMirrAuthorization(DjangoAuthorization):
-    def _user_has_perm(self, request, permission, obj):
-        # user has permission on themself
-        if request.user == obj:
-            return True
-            
-        # user has permission if they own the object
-        elif hasattr(obj, 'user') and request.user == obj.user:
-            return True
+class dMirrAuthorization(Authorization):
+    def __init__(self):
+        super(dMirrAuthorization, self).__init__()
         
-        # otherwise user must actually have the permission per object
-        elif request.user.has_perm(permission, obj):
-            return True
-            
-        return False
-        
-    def is_authorized(self, request, object=None):
-        # user must be logged in to check permissions
-        # authentication backend must set request.user
-        if not hasattr(request, 'user'):
-            return False
-            
-        # GET is always allowed
-        if request.method == 'GET':
-            return True
-           
-        # Some are ok to POST 
-        ok_to_post = ['projects']
-        
-        if request.method == 'POST' and \
-           self.resource_meta.resource_name in ok_to_post:
-           return True
-           
-        # otherwise do more checks
-        klass = self.resource_meta.object_class
-
-        # need to ensure we have perms on related fields as well
-        related_fields = [name for name, field in
-                           self.resource_meta.validation.form_class.base_fields.items()
-                           if issubclass(field.__class__, ModelChoiceField)]
-                           
-
-        # cannot check permissions if we don't know the model
-        if not klass or not getattr(klass, '_meta', None):
-            return True
-        
-        permission_codes = {
-            'POST': '%s.add_%s',
-            'PUT': '%s.change_%s',
-            'DELETE': '%s.delete_%s',
-            }
-
-        # cannot map request method to permission code name
-        if request.method not in permission_codes:
-            return True
-
-        permission_code = permission_codes[request.method] % (
-            klass._meta.app_label,
-            klass._meta.module_name
-            )
-
-        # per obj permission check, if any fail return False
-        for obj in self.resource_meta.queryset:
-            # always check the object itself first
-            if not self._user_has_perm(request, permission_code, obj):
-                return False
-            
-            # then check any related fields
-            for related_name in related_fields:
-                related_obj = getattr(obj, related_name)
-                if not self._user_has_perm(request, permission_code, related_obj):
-                    return False
-            
-                
-        return True
-        
-    #def apply_limits(self, request, object_list):
-    #    request.user.has_perm('projects.change_project')
-    #    return object_list
+    def apply_limits(self, request, object_list):
+        #request.user.has_perm('projects.change_project')
+        return object_list
         
 class dMirrAuthentication(ApiKeyAuthentication):
-    """
-    Similar to APIKeyAuthentication, however uses dmirr_api_user and 
-    dmirr_api_key as GET/POST params.
-    
-    """
-    api_user_param = 'dmirr_api_user'
-    api_key_param = 'dmirr_api_key'
-    
     def __init__(self):
         super(dMirrAuthentication, self).__init__()
-
-    def is_authenticated(self, request, **kwargs):
-        """
-        Finds the user and checks their API key.  Should return either 
-        ``True`` if allowed, ``False`` if not.  Also returns true if 
-        request.user.is_authenticated().
         
-        """
+    def is_authenticated(self, request, **kwargs):
         if request.user.is_authenticated():
             return True
 
-        username = request.GET.get(self.api_user_param) or \
-                   request.POST.get(self.api_user_param)
-        api_key = request.GET.get(self.api_key_param) or \
-                  request.POST.get(self.api_key_param)
+        return super(dMirrAuthentication, self).is_authenticated(request, **kwargs)
 
-        if not username or not api_key:
-            return self._unauthorized()
-
-        try:
-            user = db.User.objects.get(username=username)
-        except (db.User.DoesNotExist, db.User.MultipleObjectsReturned):
-            return self._unauthorized()
-
-        request.user = user
-        res = self.get_key(user, api_key)
-        
-        # FIX ME > probably want to remove dmirr_api_user, dmirr_api_key from
-        # the request object... but can't do that here cause request is 
-        # immutable.
-
-        return res
-        
 class dMirrResource(ModelResource):    
     def dehydrate(self, bundle):
         bundle.data['resource_pk'] = bundle.obj.id
@@ -228,7 +122,11 @@ class UserResource(dMirrResource):
         
     def override_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/(?P<username>[a-zA-Z][\w\d_\.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+            url(r"^(?P<resource_name>%s)%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('dispatch_list'), name="api_dispatch_list"),
+            url(r"^(?P<resource_name>%s)/schema%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_schema'), name="api_get_schema"),
+            url(r"^(?P<resource_name>%s)/set/(?P<pk_list>\w[\w/;-]*)/$" % self._meta.resource_name, self.wrap_view('get_multiple'), name="api_get_multiple"),
+            url(r"^(?P<resource_name>%s)/(?P<username>[a-zA-Z][\w\d\_\.\-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+            
         ]
         
     def apply_authorization_limits(self, request, object_list):

@@ -37,7 +37,7 @@ def reset_api_key(request, user):
         user.api_key.save()
     else:
         key = db.ApiKey(user=user)
-        key.save
+        key.save()
         
     data['profile'] = user.profile
     data['user'] = user

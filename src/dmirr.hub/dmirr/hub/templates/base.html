@@ -131,8 +131,6 @@
                     {% if user.is_authenticated %}
                         <p class="pull-right">Logged in as <a href="{% url userena_profile_detail user.username %}">{{ user.profile.display_name }}</a> | <a href="{% url userena_signout %}">Logout</a></p>
                     {% else %}
-                        <!-- <p class="pull-right"><a href="#"><a href="{% url userena_signin %}">Login</a></p> -->
-                
                         <!-- Login Modal -->
                         <div id="signin-modal" class="hide modal">
                             <div class="modal-header">

@@ -5,21 +5,21 @@ from pkg_resources import get_distribution
 from cement2.core import controller, hook
 from dmirr.core import exc
     
-class dMirrRequestHandler(drest.RequestHandler):
-    def request(self, *args, **kw):
-        try:
-            return super(dMirrRequestHandler, self).request(*args, **kw)
-        except drest.exc.dRestRequestError as e:
-            if e.response.status == 400:
-                msg = "%s:\n" % e.msg
-                msg = msg + "\n"
-
-                for key in e.content:
-                    msg = msg + "    %s\n" % key
-                    for error in e.content[key]:
-                        msg = msg + "        - %s\n" % error
-                raise exc.dMirrRequestError(msg)
-            raise exc.dMirrRequestError(e.msg)
+#class dMirrRequestHandler(drest.RequestHandler):
+#    def request(self, *args, **kw):
+#        try:
+#            return super(dMirrRequestHandler, self).request(*args, **kw)
+#        except drest.exc.dRestRequestError as e:
+#            if e.response.status == 400:
+#                msg = "%s:\n" % e.msg
+#                msg = msg + "\n"
+#
+#                for key in e.content:
+#                    msg = msg + "    %s\n" % key
+#                    for error in e.content[key]:
+#                        msg = msg + "        - %s\n" % error
+#                raise exc.dMirrRequestError(msg)
+#            raise exc.dMirrRequestError(e.msg)
         
 VERSION = get_distribution('dmirr.cli').version
 CEMENT_VERSION = get_distribution('cement2').version
@@ -57,18 +57,17 @@ class dMirrBaseController(controller.CementBaseController):
         
     def setup(self, *args, **kw):
         super(dMirrBaseController, self).setup(*args, **kw)
-        self.hub = drest.Connection(
-            self.config.get('base', 'hub_api_baseurl'),
-            request_handler=dMirrRequestHandler(),
+        self.hub = drest.api.TastyPieAPI(
+            self.config.get('base', 'hub_api_baseurl')
             )
         self.hub.auth(
-            dmirr_api_user=self.config.get('base', 'hub_api_user'),
-            dmirr_api_key=self.config.get('base', 'hub_api_key'),    
+            user=self.config.get('base', 'hub_api_user'),
+            api_key=self.config.get('base', 'hub_api_key'),    
             )
         
         # resources
-        self.hub.add_resource('users')
-        self.hub.add_resource('projects')
+        #self.hub.add_resource('users')
+        #self.hub.add_resource('projects')
         
         # this is only useful in resource controllers
         self.resource = getattr(self.hub, self.Meta.label, None)

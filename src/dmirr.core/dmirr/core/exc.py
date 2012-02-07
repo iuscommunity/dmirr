@@ -2,49 +2,32 @@
 
 class dMirrError(Exception):
     """Generic errors."""
-    def __init__(self, value, code=1):
-        Exception.__init__(self)
-        self.msg = value
-        self.code = code
+    def __init__(self, msg):
+        super(dMirrError, self).__init__()
+        self.msg = msg
     
+    def __repr__(self):
+        return "dMirrError: %s" % self.msg
+        
     def __str__(self):
         return self.msg
-    
-    def __unicode__(self):
-        return str(self.msg)
             
 class dMirrConfigError(dMirrError):
     """Config parsing and setup errors."""
-    def __init__(self, value):
-        code = 1010
-        dMirrError.__init__(self, value, code)
+    def __init__(self, ):
+        super(dMirrConfigError, self).__init__(msg)
 
 class dMirrRuntimeError(dMirrError):
     """Runtime errors."""
-    def __init__(self, value):
-        code = 1020
-        dMirrError.__init__(self, value, code)
+    def __init__(self, msg):
+        super(dMirrError, self).__init__(msg)
         
 class dMirrArgumentError(dMirrError):
     """Argument errors."""
-    def __init__(self, value):
-        code = 1030
-        dMirrError.__init__(self, value, code)
+    def __init__(self, msg):
+        super(dMirrArgumentError, self).__init__(msg)
 
-class dMirrInterfaceError(dMirrError):
-    """Interface errors."""
-    def __init__(self, value):
-        code = 1040
-        dMirrError.__init__(self, value, code)
-    
-class dMirrRequestError(dMirrError):
-    """Request errors."""
-    def __init__(self, value):
-        code = 1050
-        dMirrError.__init__(self, value, code)
-
-class dMirrConnectionError(dMirrError):
-    """Connection errors."""
-    def __init__(self, value):
-        code = 1060
-        dMirrError.__init__(self, value, code)
+class dMirrAPIError(dMirrError):
+    """API connection errors."""
+    def __init__(self, msg):
+        super(dMirrAPIError, self).__init__(msg)

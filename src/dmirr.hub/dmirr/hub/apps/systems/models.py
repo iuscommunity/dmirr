@@ -5,6 +5,8 @@ from django.core.validators import ValidationError
 import socket
 
 from dmirr.hub.lib.geo import get_geodata_by_ip
+from dmirr.hub.apps.protocols.models import Protocol
+from dmirr.hub.apps.projects.models import Project
 
 def hostname_resolves(hostname):
     try:
@@ -63,3 +65,14 @@ class System(models.Model):
     
     def __str__(self):
         return self.self.display_name
+
+class SystemResource(models.Model):
+    class Meta:
+        db_table = 'system_resources'
+        
+    user = models.ForeignKey(User)
+    system = models.ForeignKey(System, related_name='resources')
+    project = models.ForeignKey(Project)
+    protocol = models.ForeignKey(Protocol)
+    path = models.CharField(max_length=255)
+    

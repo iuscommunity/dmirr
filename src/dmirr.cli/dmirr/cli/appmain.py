@@ -30,19 +30,19 @@ def main():
     except cement_exc.CementSignalError as e:
         pass
     except cement_exc.CementRuntimeError as e:
-        print "dMirrRuntimeError => %s" % e.msg
+        print e
     except exc.dMirrRuntimeError as e:
-        print "dMirrRuntimeError => %s" % e.msg
+        print e
     except cement_exc.CementArgumentError as e:
-        print "dMirrArgumentError => %s" % e.msg
+        print e
     except exc.dMirrArgumentError as e:
-        print "dMirrArgumentError => %s" % e.msg
-    except exc.dMirrRequestError as e:
-        print "dMirrRequestError => %s" % e.msg
+        print e
+    except exc.dMirrAPIError as e:
+        print e
     except drest.exc.dRestRequestError as e:
-        print "dMirrRequestError => %s" % e.msg
-    except drest.exc.dRestConnectionError as e:
-        print "dMirrConnectionError => %s" % e.msg
+        print "dMirrAPIError => %s" % e.msg
+    except drest.exc.dRestAPIError as e:
+        print "dMirrAPIError => %s" % e.msg
     finally:
         app.close()
 

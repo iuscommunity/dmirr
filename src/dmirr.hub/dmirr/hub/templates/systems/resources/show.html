@@ -1,0 +1,22 @@
+{% extends "systems/base_systems.html" %}
+{% block title %}{{ resource.system.label }}'s Resources{% endblock %}
+{% block content_title %}<h2>Systems // Resources</h2>{% endblock %}
+
+{% block content_body %}
+    <h3>Resource Definition for {{ resource.project.display_name }}<a href="{% url update_system_resource resource.system.label resource.id %}" class="update">###</a></h3>
+    <table>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>ID:</td><td>{{ resource.id }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>System:</td><td>{{ resource.system }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Path:</td><td>{{ resource.path }}</td>
+        </tr>
+        <tr valign='top' class='table table-striped'>
+            <td align='right' width='100'>Protocol:</td><td>{{ resource.protocol }}</td>
+        </tr>
+    </table>
+{% endblock %}
+

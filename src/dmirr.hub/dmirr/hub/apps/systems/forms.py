@@ -31,3 +31,15 @@ class SystemForm(forms.ModelForm):
             remove_perm('delete_system', group, self.instance)
             
         return self.instance
+        
+class SystemResourceForm(forms.ModelForm):
+    class Meta:
+        model = db.SystemResource
+    
+    user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
+    system = forms.ModelChoiceField(queryset=db.System.objects.all(), widget=HiddenInput)
+    
+    def save(self):
+        self.instance.path = "/%s/" % self.instance.path.lstrip('/').rstrip('/')
+        return super(SystemResourceForm, self).save()
+        

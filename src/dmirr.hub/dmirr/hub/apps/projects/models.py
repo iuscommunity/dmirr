@@ -49,6 +49,12 @@ class Project(ProjectBaseModel):
     private = models.BooleanField()
     objects = ProjectManager()
         
+    def __repr__(self):
+        return self.display_name
+    
+    def __unicode__(self):
+        return unicode(self.display_name)
+        
 #@receiver(post_save, sender=ProjectItemContribution)
 #def create_allocations_with_contrib(sender, **kw):
 #    # only for new records
