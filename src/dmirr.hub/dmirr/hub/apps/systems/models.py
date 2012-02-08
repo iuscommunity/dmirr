@@ -73,6 +73,6 @@ class SystemResource(models.Model):
     user = models.ForeignKey(User)
     system = models.ForeignKey(System, related_name='resources')
     project = models.ForeignKey(Project)
-    protocol = models.ForeignKey(Protocol)
+    protocols = models.ManyToManyField(Protocol)
     path = models.CharField(max_length=255)
     

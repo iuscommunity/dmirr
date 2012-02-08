@@ -20,6 +20,7 @@ class ProjectForm(forms.ModelForm):
                              widget=forms.TextInput(attrs=ATTRS_DICT),
                              label=_("Label"),
                              error_messages={'invalid': _(ERROR_MSG)})
+                             
     def save(self):
         super(ProjectForm, self).save()
         assign('change_project', self.instance.user, self.instance)
@@ -37,3 +38,23 @@ class ProjectForm(forms.ModelForm):
             remove_perm('delete_project', group, self.instance)
             
         return self.instance
+    
+class ProjectSecondaryForm(ProjectForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectSecondaryForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.id:
+            self.fields['admin_group'].required = False
+            self.fields['admin_group'].widget.attrs['disabled'] = 'disabled'
+
+    def clean_admin_group(self):
+        # As shown in the above answer.
+        instance = getattr(self, 'instance', None)
+        if instance:
+            try:
+                self.changed_data.remove('admin_group')
+            except ValueError, e:
+                pass
+            return instance.admin_group
+        else:
+            return self.cleaned_data.get('admin_group', None)

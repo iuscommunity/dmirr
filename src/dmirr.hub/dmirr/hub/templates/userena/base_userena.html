@@ -5,13 +5,15 @@
 {% block content_sidebar %}
     {% if user.is_authenticated %}
         <h3>Navigation</h3>
-            <li><a href="{% url projects_index %}">Manage Projects</a></li>
-            <li><a href="{% url systems_index %}">Manage Systems</a></li>
-            <li><a href="{% url groups_index %}">Manage Groups</a></li>
+        <ul>
+            <li><a href="{% url manage_projects %}">Manage Projects</a></li>
+            <li><a href="{% url manage_systems %}">Manage Systems</a></li>
+            <li><a href="{% url manage_groups %}">Manage Groups</a></li>
             {% if user.is_superuser %}
-                <li><a href="{% url archs_index %}">Manage Archs</a></li>
-                <li><a href="{% url protocols_index %}">Manage Protocols</a></li>
+                <li><a href="{% url manage_archs %}">Manage Archs</a></li>
+                <li><a href="{% url manage_protocols %}">Manage Protocols</a></li>
             {% endif %}
+        </ul>
             
         <h3>My Account</h3>
         <ul>

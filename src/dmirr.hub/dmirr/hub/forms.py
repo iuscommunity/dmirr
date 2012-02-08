@@ -15,4 +15,9 @@ class dMirrLabel(forms.RegexField):
         error_messages = {'invalid': _(ERROR_MSG)}
     
     def __init__(self, *args, **kw):
-        super(dMirrLabel, self).__init__(regex=LABEL_RE, *args, **kw)
+        super(dMirrLabel, self).__init__(
+            regex=LABEL_RE, 
+            max_length=30,
+            widget=forms.TextInput(attrs=ATTRS_DICT),
+            error_messages={'invalid': _(ERROR_MSG)}, 
+            )

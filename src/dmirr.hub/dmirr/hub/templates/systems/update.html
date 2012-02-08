@@ -2,11 +2,25 @@
 {% block title %}Edit an System{% endblock %}
 
 {% block content_body %}
+    <h3>Details</h3>
     <form action="{% url update_system system.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save System" class="btn primary"/>
         <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
     </form>
+    <h3>Project Resources <a href="{% url create_system_resource system.label %}" class="add">###</a></h3> 
+    <table>
+        {% for resource in system.resources.all %}
+            <tr valign='top' class='table table-striped'>
+                <td width='200'><a href="{% url show_project resource.project.label %}">{{ resource.project }}</a> <a href="{% url update_system_resource resource.system.label resource.id %}" class="update">###</td>
+                <td>
+                    {% for protocol in resource.protocols.all %}
+                        {{ protocol }}://{{ system.label }}{{ resource.path }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 

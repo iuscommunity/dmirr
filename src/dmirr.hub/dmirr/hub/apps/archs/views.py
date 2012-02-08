@@ -8,10 +8,17 @@ from dmirr.hub import db
 from dmirr.hub.apps.archs.forms import ArchForm
 from dmirr.hub.utils import ok, Http403, session_is_owner
 
-def index(request):
+def list(request):
     data = {}
     data['archs'] = db.Arch.objects.order_by('label').all()
-    return render(request, 'archs/index.html', data)
+    return render(request, 'archs/list.html', data)
+
+@login_required
+@ok('archs.create_arch')
+def manage(request):
+    data = {}
+    data['archs'] = db.Arch.objects.order_by('label').all()
+    return render(request, 'archs/manage.html', data)
     
 @login_required
 @ok('archs.create_arch')

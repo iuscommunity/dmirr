@@ -106,27 +106,6 @@
                 <div class="container-fluid">
                     <ul>
                         <a href="{{ baseurl }}" class="brand">dMirr //</a>
-                        <!--
-                        <li class="dropdown" data-dropdown="dropdown" >
-                            <a href="#" class="dropdown-toggle brand">dMirr //</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ baseurl }}">Home</a></li>
-                                {% if user.is_authenticated %}
-                                    <li><a href="{% url my_projects user.username %}">Projects</a></li>
-                                    <li><a href="{% url my_systems user.username %}">Systems</a></li>
-                                    <li><a href="{% url my_groups user.username %}">Groups</a></li>
-                                
-                                    {% if user.is_superuser %}
-                                        <li><a href="{% url archs_index %}">Archs</a></li>
-                                        <li><a href="{% url protocols_index %}">Sync Protocols</a></li>
-                                    {% endif %}
-                                    <li class="divider"></li>
-                                    <li><a href="{{ baseurl }}account/derks/edit/">Edit my profile</a></li>
-                                    <li><a href="{{ baseurl }}account/signout/">Logout</a></li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                        -->
                     </ul>
                     {% if user.is_authenticated %}
                         <p class="pull-right">Logged in as <a href="{% url userena_profile_detail user.username %}">{{ user.profile.display_name }}</a> | <a href="{% url userena_signout %}">Logout</a></p>

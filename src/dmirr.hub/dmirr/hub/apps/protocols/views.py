@@ -8,10 +8,17 @@ from dmirr.hub import db
 from dmirr.hub.apps.protocols.forms import ProtocolForm
 from dmirr.hub.utils import ok, Http403, session_is_owner
 
-def index(request):
+def list(request):
     data = {}
     data['protocols'] = db.Protocol.objects.order_by('label').all()
-    return render(request, 'protocols/index.html', data)
+    return render(request, 'protocols/list.html', data)
+    
+@login_required
+@ok('protocols.create_protocol')
+def manage(request):
+    data = {}
+    data['protocols'] = db.Protocol.objects.order_by('label').all()
+    return render(request, 'protocols/manage.html', data)
     
 @login_required
 @ok('protocols.create_protocol')

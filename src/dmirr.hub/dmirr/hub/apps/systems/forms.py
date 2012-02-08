@@ -31,7 +31,27 @@ class SystemForm(forms.ModelForm):
             remove_perm('delete_system', group, self.instance)
             
         return self.instance
-        
+
+class SystemSecondaryForm(SystemForm):
+    def __init__(self, *args, **kwargs):
+        super(SystemSecondaryForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.id:
+            self.fields['admin_group'].required = False
+            self.fields['admin_group'].widget.attrs['disabled'] = 'disabled'
+
+    def clean_admin_group(self):
+        # As shown in the above answer.
+        instance = getattr(self, 'instance', None)
+        if instance:
+            try:
+                self.changed_data.remove('admin_group')
+            except ValueError, e:
+                pass
+            return instance.admin_group
+        else:
+            return self.cleaned_data.get('admin_group', None)
+                    
 class SystemResourceForm(forms.ModelForm):
     class Meta:
         model = db.SystemResource

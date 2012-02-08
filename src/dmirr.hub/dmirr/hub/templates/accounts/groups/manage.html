@@ -9,19 +9,19 @@
 
     <div>
         {% if user.profile.managed_groups %}
-            <h3>Groups You Manage:</h2>
+            <h4>Groups You Manage:</h4>
             <ul>
-                {% for group in user.profile.managed_groups.all %}
+                {% for group in user.profile.managed_groups %}
                     <li> <a href="{% url show_group group.id %}">{{ group.name }}</a> <a href="{% url update_group group.id %}" class="update">###</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
     
         {% if user.profile.unmanaged_groups %}
-            <h3>Non-Managed Groups You Are Associated With:</h2>
+            <h4>Non-Managed Groups You Are Associated With:</h4>
             <ul>
-                {% for group in user.profile.unmanaged_groups.all %}                
-                    <li> <a href="{% url show_group group.id %}">{{ group.name }}</a></li>
+                {% for group in user.profile.unmanaged_groups %}     
+                    <li> <a href="{% url show_group group.id %}">{{ group }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}

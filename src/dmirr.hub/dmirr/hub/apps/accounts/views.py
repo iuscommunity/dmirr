@@ -43,10 +43,15 @@ def reset_api_key(request, user):
     data['user'] = user
     return redirect(reverse('show_api_key', kwargs={'user': user.username}))
     
-@login_required
-def groups_index(request):
+def list_groups(request):
     data = {}
-    return render(request, 'accounts/groups/index.html', data)
+    data['groups'] = db.Group.objects.all()
+    return render(request, 'accounts/groups/list.html', data)
+
+@login_required
+def manage_groups(request):
+    data = {}
+    return render(request, 'accounts/groups/manage.html', data)
     
 @login_required
 def create_group(request):

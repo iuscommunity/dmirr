@@ -16,7 +16,18 @@ urlpatterns = patterns('',
     url(r'^api/', include(v0_api.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('dmirr.hub.apps.repos.urls')),
+
+    ### GROUP OVERRIDES
+    url(r'^groups/$', 
+        'dmirr.hub.apps.accounts.views.list_groups', 
+        name='list_groups'),
+    url(r'^groups/(?P<group>[\d]+)/$', 
+        'dmirr.hub.apps.accounts.views.show_group', 
+        name='show_group'),
+    
+    ### PROJECT OVERRIDES
     url(r'^(?P<project>[\w\-\.\_]+)/$', 'dmirr.hub.apps.projects.views.show', name='show_project'),
     url(r'^(?P<project>[\w\-\.\_]+)/update/$', 'dmirr.hub.apps.projects.views.update', name='update_project'),
     url(r'^(?P<project>[\w\-\.\_]+)/delete/$', 'dmirr.hub.apps.projects.views.delete', name='delete_project'),
+    
 )

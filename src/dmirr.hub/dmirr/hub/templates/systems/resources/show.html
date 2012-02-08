@@ -9,13 +9,13 @@
             <td align='right' width='100'>ID:</td><td>{{ resource.id }}</td>
         </tr>
         <tr valign='top' class='table table-striped'>
-            <td align='right' width='100'>System:</td><td>{{ resource.system }}</td>
+            <td align='right' width='100'>System:</td><td><a href="{% url show_system resource.system.label %}">{{ resource.system.label }}</a></td>
         </tr>
         <tr valign='top' class='table table-striped'>
             <td align='right' width='100'>Path:</td><td>{{ resource.path }}</td>
         </tr>
         <tr valign='top' class='table table-striped'>
-            <td align='right' width='100'>Protocol:</td><td>{{ resource.protocol }}</td>
+            <td align='right' width='100'>Protocols:</td><td>{{ resource.protocols.all|join:" // " }}</td>
         </tr>
     </table>
 {% endblock %}

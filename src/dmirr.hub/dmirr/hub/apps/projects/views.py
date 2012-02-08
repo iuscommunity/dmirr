@@ -4,13 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from dmirr.hub import db
-from dmirr.hub.apps.projects.forms import ProjectForm
+from dmirr.hub.apps.projects.forms import ProjectForm, ProjectSecondaryForm
 from dmirr.hub.utils import ok, Http403, session_is_owner
 
-def index(request):
+def list(request):
     data = {}
     data['projects'] = db.Project.objects.order_by('label').all()
-    return render(request, 'projects/index.html', data)
+    return render(request, 'projects/list.html', data)
+
+@login_required
+def manage(request):
+    data = {}
+    data['projects'] = request.user.profile.projects
+    return render(request, 'projects/manage.html', data)
     
 @login_required
 def create(request):
@@ -27,7 +33,9 @@ def create(request):
                                     kwargs={'project': project.label}))                                
     else:
         form = ProjectForm(initial=dict(user=request.user))
-        
+
+    form.fields['admin_group'].queryset = request.user.profile\
+                                                 .managed_groups.all()    
     data['form'] = form    
     return render(request, 'projects/create.html', data)
 
@@ -38,15 +46,26 @@ def update(request, project):
     project = db.Project.objects.get(label=project)
     
     if request.method == 'POST':
-        form = ProjectForm(request.POST, instance=project)
+        if request.user == project.user:
+            form = ProjectForm(request.POST, instance=project)
+        else:
+            form = ProjectSecondaryForm(request.POST, instance=project)
+            
         if form.is_valid():
             project = form.save()
-            
             return redirect(reverse('show_project',
                                     kwargs={'project': project.label}))                                
     else:
-        form = ProjectForm(instance=project)
-        
+        if request.user == project.user:
+            form = ProjectForm(instance=project)
+            form.fields['admin_group'].queryset = request.user.profile\
+                                                         .managed_groups.all()    
+        else:
+            form = ProjectSecondaryForm(
+                instance=project,            
+                initial=dict(admin_group=project.admin_group),
+                )
+
     data['form'] = form   
     data['project'] = project 
     return render(request, 'projects/update.html', data)
