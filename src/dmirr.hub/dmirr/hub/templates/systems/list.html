@@ -1,14 +1,10 @@
 {% extends "systems/base_systems.html" %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_system %}" class="btn success">New System</a>
-    </div>
-
     <div>
         <ul>
             {% for system in systems %}
-                <li> <a href="{% url show_system system.label %}">{{ system.label }}</a> </li>
+                <li> <img src="{{ flags }}{{ system.country_code }}.png"> <a href="{% url show_system system.label %}">{{ system.label }}</a> </li>
             {% endfor %}
         </ul>
     </div>

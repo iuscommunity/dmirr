@@ -1,6 +1,6 @@
 {% extends 'accounts/base_accounts.html' %}
 
-{% block content_title %}<h2>{{ user.profile.display_name }} // Groups</h2>{% endblock %}
+{% block content_title %}<h2>Groups</h2>{% endblock %}
 
 {% block content_body %}
     <h3>{{ group.name }} {% if group in user.profile.managed_groups %}<small><a href="{% url update_group group.id %}" class="update">###</a></small>{% endif %}</h3>

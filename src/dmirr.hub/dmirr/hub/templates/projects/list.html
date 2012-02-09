@@ -2,10 +2,6 @@
 {% block content_title %}<h2>Projects</h2>{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_project %}" class="btn success">New Project</a>
-    </div>
-
     <div>
         <ul>
             {% for project in projects %}

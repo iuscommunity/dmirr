@@ -65,3 +65,56 @@
       mugshot: ""
       privacy: registered
       user: 2
+
+- model: archs.arch
+  pk: 1
+  fields:
+      label: i386
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+      
+- model: archs.arch
+  pk: 2
+  fields:
+      label: x86_64
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+      
+- model: archs.arch
+  pk: 3
+  fields:
+      label: 'ppc'
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+
+- model: protocols.protocol
+  pk: 1
+  fields:
+      label: http
+      port: 80
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+
+- model: protocols.protocol
+  pk: 2
+  fields:
+      label: https
+      port: 443
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+
+- model: protocols.protocol
+  pk: 3
+  fields:
+      label: ftp
+      port: 21
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29
+
+- model: protocols.protocol
+  pk: 4
+  fields:
+      label: rsync
+      port: 873
+      create_date: 2008-09-04 14:25:29
+      update_date: 2008-09-04 14:25:29

@@ -1,8 +1,8 @@
-{% extends "repos/base_repos.html" %}
+{% extends "projects/repos/base_project_repos.html" %}
 {% block title %}Edit {{ repo.display_name }}{% endblock %}
 
 {% block content_body %}
-    <form action="{% url update_repo project.label repo.label %}" method="POST" class="form-stacked">
+    <form action="{% url update_project_repo project.label repo.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save Repo" class="btn primary"/>

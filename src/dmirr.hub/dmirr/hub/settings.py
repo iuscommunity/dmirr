@@ -179,8 +179,6 @@ LOGOUT_URL = '/account/signout/'
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
-#GEOS_LIBRARY_PATH = '/home/bob/local/lib/libgeos_c.so'
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -197,11 +195,39 @@ INSTALLED_APPS = (
     'dmirr.hub.apps.base',
     'dmirr.hub.apps.accounts',
     'dmirr.hub.apps.projects',
-    'dmirr.hub.apps.repos',
     'dmirr.hub.apps.archs',
     'dmirr.hub.apps.protocols',
     'dmirr.hub.apps.systems',
+    'dmirr.hub.apps.mirrorlist',
     )
+
+CACHES = {
+    'memcached': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '172.19.26.240:11211',
+            '172.19.26.242:11211',
+        ],
+        'TIMEOUT': 28800,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+            }
+    },
+    'locmem': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 28800,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+            }
+    },
+    'dummy': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+CACHES['default'] = CACHES['dummy']
+
+GOOGLE_MAPS_KEY = ''
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

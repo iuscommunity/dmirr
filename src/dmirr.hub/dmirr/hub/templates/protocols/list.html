@@ -2,13 +2,9 @@
 {% block title %}Protocols{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_protocol %}" class="btn success">New Protocol</a>
-    </div>
-
     <ul>
         {% for protocol in protocols %}
-            <li> {{ protocol.label }} <a href="{% url update_protocol protocol.label %}" class="update">###</a></li>
+            <li> {{ protocol.label }} </li>
         {% endfor %}
     </ul>
 {% endblock %}

@@ -3,15 +3,11 @@
 
 {% block title %}{{ project.display_name }}{% endblock %}
 
-{% block project_nav %}
+{% block content_title %}
     {% get_obj_perms user for project as "project_perms" %}
-
-    {% if "change_project" in project_perms %}
-        <li> <a href="{% url update_project project.label %}">{{ project.display_name }} Settings</a></li>
-    {% endif %}
+    <h2>Projects &raquo; {{ project.display_name }} {% if "change_project" in project_perms %}<a href="{% url update_project project.label %}" class="update">###</a>{% endif %}</h2>
 {% endblock %}
 
-{% block content_title %}<h2>Projects &raquo; {{ project.display_name }} <a href="{% url update_project project.label %}" class="update">###</a></h2>{% endblock %}
 {% block content_body %}
     {% get_obj_perms user for project as "project_perms" %}
     
@@ -23,15 +19,29 @@
     {% endif %}
     <p><b>Website:</b> <a href="{{ project.url }}">{{ project.url }}</a></p>
     
-    <h3>Repositories {% if "change_project" in project_perms %}<a href="{% url create_repo project.label %}" class="add">###</a>{% endif %}</h3>
+    <h3>Repositories {% if "change_project" in project_perms %}<a href="{% url create_project_repo project.label %}" class="add">###</a>{% endif %}</h3>
     <ul>
         {% for repo in project.repos.all %}
             {% if "change_project" in project_perms %}
-                <li> {{ repo.display_name }} <a href="{% url update_repo project.label repo.label %}" class="update">###</a> <a href="{% url delete_repo project.label repo.label %}" onclick="return confirm('Forever delete {{ repo.label }}?')" class="delete">###</a></li>
+                <li> {{ repo.display_name }} <a href="{% url update_project_repo project.label repo.label %}" class="update">###</a> <a href="{% url delete_project_repo project.label repo.label %}" onclick="return confirm('Forever delete {{ repo.label }}?')" class="delete">###</a></li>
             {% else %}
                 <li> {{ repo.display_name }}</li>
             {% endif %}
         {% endfor %}
     </ul>
+    
+    <h3>Downstream Mirrors</h3>
+    <table>
+        {% for resource in project.resources.all %}
+            <tr valign='top' class='table table-striped'>
+                <td width='400'><img src="{{ flags }}{{ resource.system.country_code }}.png"> <a href="{% url show_system_resource resource.system.label resource.id %}">{{ resource.system }}</a> 
+                <td width='200' class="pull-right">
+                    {% for protocol in resource.protocols.all %}
+                        <a href="{{ protocol }}://{{ resource.system.label }}{{ resource.path }}">{{ protocol }}</a>  
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 

@@ -1,9 +1,9 @@
 
 from django import forms
 from django.forms.widgets import HiddenInput
-from django.utils.translation import ugettext_lazy as _
 from guardian.shortcuts import assign, remove_perm
 
+from dmirr.hub.forms import dMirrLabel
 from dmirr.hub import db
 
 ATTRS_DICT = {'class': 'required'}
@@ -15,11 +15,7 @@ class ProjectForm(forms.ModelForm):
         model = db.Project
 
     user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
-    label = forms.RegexField(regex=LABEL_RE,
-                             max_length=30,
-                             widget=forms.TextInput(attrs=ATTRS_DICT),
-                             label=_("Label"),
-                             error_messages={'invalid': _(ERROR_MSG)})
+    label = dMirrLabel()
                              
     def save(self):
         super(ProjectForm, self).save()
@@ -58,3 +54,11 @@ class ProjectSecondaryForm(ProjectForm):
             return instance.admin_group
         else:
             return self.cleaned_data.get('admin_group', None)
+
+class ProjectRepoForm(forms.ModelForm):
+    class Meta:
+        model = db.ProjectRepo
+        
+    user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
+    project = forms.ModelChoiceField(queryset=db.Project.objects.all(), widget=HiddenInput)
+    label = dMirrLabel()

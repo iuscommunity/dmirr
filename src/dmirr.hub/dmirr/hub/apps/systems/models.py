@@ -21,6 +21,9 @@ class System(models.Model):
         
     user = models.ForeignKey(User, related_name='systems')
     admin_group = models.ForeignKey(Group, related_name='systems', null=True, blank=True)
+    contact_name = models.CharField(max_length=255)
+    contact_email = models.CharField(max_length=255)
+    online = models.BooleanField()
     
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True, auto_now=True)                     
@@ -72,7 +75,7 @@ class SystemResource(models.Model):
         
     user = models.ForeignKey(User)
     system = models.ForeignKey(System, related_name='resources')
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name='resources')
     protocols = models.ManyToManyField(Protocol)
     path = models.CharField(max_length=255)
-    
+    include_in_mirrorlist = models.BooleanField()

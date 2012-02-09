@@ -1,8 +1,8 @@
-{% extends "repos/base_repos.html" %}
+{% extends "projects/repos/base_project_repos.html" %}
 {% block title %}Create a Repo{% endblock %}
 
 {% block content_body %}
-    <form action="{% url create_repo project.label %}" method="POST" class="form-stacked">
+    <form action="{% url create_project_repo project.label %}" method="POST" class="form-stacked">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Create Repo" class="btn primary"/>
