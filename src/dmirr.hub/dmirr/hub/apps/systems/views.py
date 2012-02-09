@@ -82,7 +82,7 @@ def delete(request, system):
     data = {}
     system = get_object_or_404(db.System, label=system)
     system.delete()
-    return redirect(reverse('systems_index'))
+    return redirect(reverse('manage_systems'))
 
 ### SYSTEM RESOURCES
     

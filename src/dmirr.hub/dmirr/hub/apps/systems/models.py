@@ -21,8 +21,8 @@ class System(models.Model):
         
     user = models.ForeignKey(User, related_name='systems')
     admin_group = models.ForeignKey(Group, related_name='systems', null=True, blank=True)
-    contact_name = models.CharField(max_length=255)
-    contact_email = models.CharField(max_length=255)
+    contact_name = models.CharField(max_length=255, null=True, blank=True)
+    contact_email = models.CharField(max_length=255, null=True, blank=True)
     online = models.BooleanField()
     
     create_date = models.DateTimeField(auto_now_add=True)

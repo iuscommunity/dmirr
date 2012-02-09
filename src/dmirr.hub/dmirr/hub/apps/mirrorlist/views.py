@@ -29,6 +29,8 @@ def mirrorlist(request):
                              label=request.GET.get('protocol', 'http'))
     
     for resource in repo.project.resources.all():
+        if not resource.include_in_mirrorlist:
+            continue
         if protocol in resource.protocols.all() and \
            arch in repo.archs.all():
             full_uri = "%s://%s/%s/%s/" % (

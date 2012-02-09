@@ -9,18 +9,11 @@
         <input type="submit" value="Save System" class="btn primary"/>
         <input type="button" value="Cancel" class="btn secondary" onclick="javascript:history.back(1)"/>
     </form>
-    <h3>Project Resources <a href="{% url create_system_resource system.label %}" class="add">###</a></h3> 
-    <table>
-        {% for resource in system.resources.all %}
-            <tr valign='top' class='table table-striped'>
-                <td width='200'><a href="{% url show_project resource.project.label %}">{{ resource.project }}</a> <a href="{% url update_system_resource resource.system.label resource.id %}" class="update">###</td>
-                <td>
-                    {% for protocol in resource.protocols.all %}
-                        {{ protocol }}://{{ system.label }}{{ resource.path }}<br>
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+    <!-- FIX ME need a call out warning block -->
+    <div id="delete-box">
+        <h3>System Deletion</h3>
+        <p>If you are absolutely sure that you want to delete {{ system.label }} and <b>all of its associated data</b>, do so by clicking the big scary red button.</p>
+        <p style="padding-right: 10px;"><a href="{% url delete_system system.label %}" class="btn danger pull-right" onclick="javascript:return confirm('Forever delete {{ system.label }}?');">Delete System</a></p>
+    </div>
 {% endblock %}
 

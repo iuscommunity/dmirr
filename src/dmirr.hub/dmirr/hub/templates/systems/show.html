@@ -14,6 +14,16 @@
             <tr valign='top' class='table table-striped'>
                 <td width='100'>Admin Group:</td><td><a href="{% url show_group system.admin_group.id %}">{{ system.admin_group.name }}</a></td>
             </tr>
+        {% endif %}        
+        {% if system.contact_name %}
+            <tr valign='top' class='table table-striped'>
+                <td width='100'>Contact Name:</td><td>{{ system.contact_name }}</a></td>
+            </tr>
+        {% endif %}
+        {% if system.contact_email %}
+            <tr valign='top' class='table table-striped'>
+                <td width='100'>Contact Email:</td><td>{{ system.contact_email }}</a></td>
+            </tr>
         {% endif %}
         <tr valign='top' class='table table-striped'>
             <td width='100'>IP Addr:</td><td>{{ system.ip }}</td>

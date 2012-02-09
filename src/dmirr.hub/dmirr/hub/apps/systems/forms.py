@@ -9,7 +9,7 @@ class SystemForm(forms.ModelForm):
     class Meta:
         model = db.System
         exclude = ['ip', 'longitude', 'latitude', 'country', 'city', 'region', 
-                   'postal_code', 'country_code']
+                   'postal_code', 'country_code', 'online']
     
     user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
     label = forms.CharField(label="Hostname")
