@@ -1,0 +1,36 @@
+
+<VirtualHost *:80>
+    ServerName dmirr.example.com
+    DocumentRoot /path/to/dmirr/htdocs/
+    ErrorLog /path/to/dmirr/logs/error_log
+    CustomLog /path/to/dmirr/logs/access_log combined
+
+    WSGIDaemonProcess dmirr user=dmirr group=dmirr display-name=dmirr maximum-requests=1000 processes=4 threads=25
+    WSGIProcessGroup dmirr
+
+    WSGIScriptAlias / /path/to/dmirr/dmirr.wsgi
+
+    Alias /static /path/to/dmirr/static/
+    Alias /media /path/to/dmirr/media/
+</VirtualHost>
+
+<VirtualHost *:443>
+    SSLEngine on
+    SSLProtocol all -SSLv2
+    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+    SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+    SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+    
+    ServerName dmirr.example.com
+    DocumentRoot /path/to/dmirr/htdocs/
+    ErrorLog /path/to/dmirr/logs/ssl_error_log
+    CustomLog /path/to/dmirr/logs/ssl_access_log combined
+
+    WSGIDaemonProcess dmirr-ssl user=dmirr group=dmirr display-name=dmirr maximum-requests=1000 processes=4 threads=25
+    WSGIProcessGroup dmirr-ssl
+
+    WSGIScriptAlias / /path/to/dmirr/dmirr.wsgi
+
+    Alias /static /path/to/dmirr/static/
+    Alias /media /path/to/dmirr/media/
+</VirtualHost>
