@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load guardian_tags %}
 
 {% block content_title %}<h2>Accounts // {{ user.profile.display_name }}</h2>{% endblock %}
 {% block content_sidebar %}
     {% if user.is_authenticated %}
         <h3>Navigation</h3>
         <ul>
-            <li><a href="{% url manage_projects %}">Manage Projects</a></li>
-            <li><a href="{% url manage_systems %}">Manage Systems</a></li>
-            <li><a href="{% url manage_groups %}">Manage Groups</a></li>
-            {% if user.is_superuser %}
-                <li><a href="{% url manage_archs %}">Manage Archs</a></li>
-                <li><a href="{% url manage_protocols %}">Manage Protocols</a></li>
-            {% endif %}
+            {% if perms.projects %}<li><a href="{% url manage_projects %}">Manage Projects</a></li>{% endif %}
+            {% if perms.systems %}<li><a href="{% url manage_systems %}">Manage Systems</a></li>{% endif %}
+            {% if perms.auth.add_group %}<li><a href="{% url manage_groups %}">Manage Groups</a></li>{% endif %}
+            {% if perms.archs %}<li><a href="{% url manage_archs %}">Manage Archs</a></li>{% endif %}
+            {% if perms.protocols %}<li><a href="{% url manage_protocols %}">Manage Protocols</a></li>{% endif %}
         </ul>
             
         <h3>My Account</h3>

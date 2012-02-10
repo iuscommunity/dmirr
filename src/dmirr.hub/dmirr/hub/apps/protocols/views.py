@@ -14,14 +14,13 @@ def list(request):
     return render(request, 'protocols/list.html', data)
     
 @login_required
-@ok('protocols.create_protocol')
 def manage(request):
     data = {}
     data['protocols'] = db.Protocol.objects.order_by('label').all()
     return render(request, 'protocols/manage.html', data)
     
 @login_required
-@ok('protocols.create_protocol')
+@ok('protocols.add_protocol')
 def create(request):
     data = {}
     if request.method == 'POST':
@@ -29,7 +28,7 @@ def create(request):
         if form.is_valid():
             protocol = form.save()
             
-            return redirect(reverse('protocols_index'))
+            return redirect(reverse('manage_protocols'))
     else:
         form = ProtocolForm()
         
@@ -37,7 +36,7 @@ def create(request):
     return render(request, 'protocols/create.html', data)
 
 @login_required
-@ok('protocols.change_protocol', (db.Protocol, 'label', 'protocol'))
+@ok('protocols.change_protocol')
 def update(request, protocol):
     data = {}
     protocol = get_object_or_404(db.Protocol, label=protocol)
@@ -46,7 +45,7 @@ def update(request, protocol):
         form = ProtocolForm(request.POST, instance=protocol)
         if form.is_valid():
             protocol = form.save()
-            return redirect(reverse('protocols_index'))
+            return redirect(reverse('manage_protocols'))
     else:
         form = ProtocolForm(instance=protocol)
         
@@ -60,10 +59,10 @@ def show(request, protocol):
     return render(request, 'protocols/show.html', data)
 
 @login_required
-@ok('protocols.delete_protocol', (db.Protocol, 'label', 'protocol'))
+@ok('protocols.delete_protocol')
 def delete(request, protocol):
     data = {}
     protocol = db.Protocol.objects.get(label=protocol)
     protocol.delete()
-    return redirect(reverse('protocols_index'))
+    return redirect(reverse('manage_protocols'))
     

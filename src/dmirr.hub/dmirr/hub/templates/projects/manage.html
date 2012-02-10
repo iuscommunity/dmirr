@@ -2,10 +2,12 @@
 {% block content_title %}<h2>{{ user.profile.display_name }} // Projects</h2>{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_project %}" class="btn success">New Project</a>
-    </div>
-
+    {% if perms.projects.add_project %}
+        <div class="pull-right" style="padding-right: 10px;">
+            <a href="{% url create_project %}" class="btn success">New Project</a>
+        </div>
+    {% endif %}
+    
     <div>
         <ul>
             {% for project in user.profile.projects %}

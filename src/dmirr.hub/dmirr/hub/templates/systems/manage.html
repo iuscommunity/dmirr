@@ -2,10 +2,12 @@
 {% block content_title %}<h2>{{ user.profile.display_name }} // Systems</h2>{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_system %}" class="btn success">New System</a>
-    </div>
-
+    {% if perms.systems.add_system %}
+        <div class="pull-right" style="padding-right: 10px;">
+            <a href="{% url create_system %}" class="btn success">New System</a>
+        </div>
+    {% endif %}
+    
     <div>
         <ul>
             {% for system in user.profile.systems %}

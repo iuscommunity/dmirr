@@ -2,13 +2,14 @@
 {% block title %}dMirr Archs{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_arch %}" class="btn success">New Arch</a>
-    </div>
-
+    {% if perms.archs.add_arch %}
+        <div class="pull-right" style="padding-right: 10px;">
+            <a href="{% url create_arch %}" class="btn success">New Arch</a>
+        </div>
+    {% endif %}
     <ul>
         {% for arch in archs %}
-            <li> {{ arch.label }} <a href="{% url update_arch arch.label %}" class="update">###</a></li>
+            <li> {{ arch.label }} {% if perms.archs %}<a href="{% url update_arch arch.label %}" class="update">###</a>{% endif %}</li>
         {% endfor %}
     </ul>
 {% endblock %}

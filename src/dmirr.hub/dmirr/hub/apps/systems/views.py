@@ -22,6 +22,7 @@ def manage(request):
     return render(request, 'systems/manage.html', data)    
 
 @login_required
+@ok('systems.add_system')
 def create(request):
     data = {}
     if request.method == 'POST':

@@ -6,18 +6,6 @@ from dmirr.hub.apps.accounts.forms import GroupForm, AddUserToGroupForm
 from dmirr.hub import db
 from dmirr.hub.utils import ok, session_is_owner, Http403
 
-def index_view(request):
-    if request.user.is_authenticated():
-        return redirect('/account/%s/' % request.user.username)
-    else:
-        return redirect('/account/signin/')
-    
-def my_projects(request, user):
-    data = {}
-    print request.user.profile.my_projects
-    data['projects'] = request.user.profile.my_projects
-    return render(request, 'accounts/projects.html', data)
-    
 @login_required
 @ok('auth.change_user', (db.User, 'username', 'user'))
 def show_api_key(request, user):
@@ -54,6 +42,7 @@ def manage_groups(request):
     return render(request, 'accounts/groups/manage.html', data)
     
 @login_required
+@ok('auth.add_group')
 def create_group(request):
     data = {}
 
@@ -133,5 +122,5 @@ def delete_group(request, group):
     data = {}
     group = db.Group.objects.get(pk=group)
     group.delete()
-    return redirect(reverse('groups_index'))
+    return redirect(reverse('manage_groups'))
     

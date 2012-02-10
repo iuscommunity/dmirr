@@ -14,14 +14,13 @@ def list(request):
     return render(request, 'archs/list.html', data)
 
 @login_required
-@ok('archs.create_arch')
 def manage(request):
     data = {}
     data['archs'] = db.Arch.objects.order_by('label').all()
     return render(request, 'archs/manage.html', data)
     
 @login_required
-@ok('archs.create_arch')
+@ok('archs.add_arch')
 def create(request):
     data = {}
     if request.method == 'POST':
@@ -29,7 +28,7 @@ def create(request):
         if form.is_valid():
             arch = form.save()
             
-            return redirect(reverse('archs_index'))
+            return redirect(reverse('manage_archs'))
     else:
         form = ArchForm()
         
@@ -37,7 +36,7 @@ def create(request):
     return render(request, 'archs/create.html', data)
 
 @login_required
-@ok('archs.change_arch', (db.Arch, 'label', 'arch'))
+@ok('archs.change_arch')
 def update(request, arch):
     data = {}
     arch = get_object_or_404(db.Arch, label=arch)
@@ -46,7 +45,7 @@ def update(request, arch):
         form = ArchForm(request.POST, instance=arch)
         if form.is_valid():
             arch = form.save()
-            return redirect(reverse('archs_index'))
+            return redirect(reverse('manage_archs'))
     else:
         form = ArchForm(instance=arch)
         
@@ -60,10 +59,10 @@ def show(request, arch):
     return render(request, 'archs/show.html', data)
 
 @login_required
-@ok('archs.delete_arch', (db.Arch, 'label', 'arch'))
+@ok('archs.delete_arch')
 def delete(request, arch):
     data = {}
     arch = db.Arch.objects.get(label=arch)
     arch.delete()
-    return redirect(reverse('archs_index'))
+    return redirect(reverse('manage_archs'))
     

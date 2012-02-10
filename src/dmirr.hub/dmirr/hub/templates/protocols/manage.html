@@ -2,13 +2,15 @@
 {% block title %}dMirr Protocols{% endblock %}
 
 {% block content_body %}
-    <div class="pull-right" style="padding-right: 10px;">
-        <a href="{% url create_protocol %}" class="btn success">New Protocol</a>
-    </div>
-
+    {% if perms.protocols.add_protocol %}
+        <div class="pull-right" style="padding-right: 10px;">
+            <a href="{% url create_protocol %}" class="btn success">New Protocol</a>
+        </div>
+    {% endif %}
+    
     <ul>
         {% for protocol in protocols %}
-            <li> {{ protocol.label }} <a href="{% url update_protocol protocol.label %}" class="update">###</a></li>
+            <li> {{ protocol.label }} {% if perms.protocols %}<a href="{% url update_protocol protocol.label %}" class="update">###</a>{% endif %}</li>
         {% endfor %}
     </ul>
 {% endblock %}

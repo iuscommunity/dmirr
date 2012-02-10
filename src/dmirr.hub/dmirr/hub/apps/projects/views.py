@@ -20,6 +20,7 @@ def manage(request):
     return render(request, 'projects/manage.html', data)
     
 @login_required
+@ok('projects.add_project')
 def create(request):
     data = {}
     if request.method == 'POST':
