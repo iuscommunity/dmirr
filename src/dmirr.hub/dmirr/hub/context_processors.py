@@ -14,5 +14,6 @@ def template_shortcuts(request):
         'site' : Site.objects.get_current(),
         'dmirr_version' : get_distribution('dmirr.hub').version,
         'flags' : "%simg/flags/" % settings.STATIC_URL,
+        'ssl_login' : settings.DMIRR_SSL_LOGIN,
         }
     return cuts

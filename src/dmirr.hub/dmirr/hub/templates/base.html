@@ -143,7 +143,11 @@
                                 </form>
                             </div>
                         </div>
-                        <p class="pull-right"><a data-controls-modal="signin-modal" href="javascript:;">Login</a></p>
+                        {% if ssl_login %}
+                            <p class="pull-right"><a href="{% url userena_signin %}">Login</a></p>
+                        {% else %}
+                            <p class="pull-right"><a data-controls-modal="signin-modal" href="javascript:;">Login</a></p>
+                        {% endif %}
                     {% endif %}    
                 </div>
             </div>            

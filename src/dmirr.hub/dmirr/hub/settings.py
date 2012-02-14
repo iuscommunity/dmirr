@@ -227,6 +227,7 @@ CACHES = {
 CACHES['default'] = CACHES['dummy']
 
 DMIRR_REMOTE_ADDR_KEY = 'REMOTE_ADDR'
+DMIRR_SSL_LOGIN = False
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
