@@ -66,6 +66,7 @@ def mirrorlist(request):
                                client.get('country_name', None))
             data['location'] = '%s (%s)' % (loc, remote)
             
+        data['location'] = data['location'].encode('utf-8')
         data['resources'] = resources
         cache.set(key, data)
         
