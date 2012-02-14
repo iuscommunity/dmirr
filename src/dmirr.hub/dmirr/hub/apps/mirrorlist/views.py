@@ -18,7 +18,6 @@ def get_location(city=None, region=None, country=None):
         location = 'US'
     return location
 
-#@cache_page(60 * 60)
 def mirrorlist(request):
     data = {}
     resources = []
