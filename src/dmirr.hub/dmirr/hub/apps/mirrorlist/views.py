@@ -21,7 +21,7 @@ def get_location(city=None, region=None, country=None):
 def mirrorlist(request):
     data = {}
     resources = []
-    remote = os.environ[settings.DMIRR_REMOTE_ADDR_KEY]
+    remote = request.environ[settings.DMIRR_REMOTE_ADDR_KEY]
                           
     client = get_geodata_by_ip(remote)
     repo = get_object_or_404(db.ProjectRepo, 
