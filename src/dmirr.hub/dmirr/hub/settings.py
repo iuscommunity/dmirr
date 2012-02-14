@@ -226,7 +226,7 @@ CACHES = {
 }
 CACHES['default'] = CACHES['dummy']
 
-GOOGLE_MAPS_KEY = ''
+DMIRR_REMOTE_ADDR_KEY = 'REMOTE_ADDR'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

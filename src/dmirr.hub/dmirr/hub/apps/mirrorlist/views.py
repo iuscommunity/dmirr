@@ -1,5 +1,6 @@
 
 import re
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from dmirr.hub.lib.geo import get_geodata_by_ip, get_distance
@@ -16,11 +17,14 @@ def get_location(city=None, region=None, country=None):
         location = 'US'
     return location
 
-@cache_page(60 * 60)
+#@cache_page(60 * 60)
 def mirrorlist(request):
     data = {}
     resources = []
-    client = get_geodata_by_ip(request.environ['REMOTE_ADDR'])
+    remote = settings.get('DMIRR_REMOTE_ADDR_KEY', 
+                          request.environ['REMOTE_ADDR'])
+                          
+    client = get_geodata_by_ip(remote)
     repo = get_object_or_404(db.ProjectRepo, 
                              label=request.GET.get('repo', None))
     arch = get_object_or_404(db.Arch, 
