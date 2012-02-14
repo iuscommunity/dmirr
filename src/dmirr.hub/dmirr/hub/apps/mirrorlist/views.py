@@ -34,7 +34,7 @@ def mirrorlist(request):
     key = "%s-%s-%s-%s" % (remote, repo.id, arch.id, protocol.id)
 
     cached_data = cache.get(key)
-    if cached_resources:
+    if cached_data:
         data = cached_data
     else:
         for resource in repo.project.resources.all():
