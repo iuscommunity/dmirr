@@ -44,7 +44,7 @@
             <td width='100'>Postal Code:</td><td>{{ system.postal_code }}</td>
         </tr>
         <tr valign='top' class='table table-striped'>
-            <td width='100'>Country:</td><td>{{ system.country }} ( {{ system.country_code }} ) <img src="{{ flags }}{{ system.country_code }}.png"></td>
+            <td width='100'>Country:</td><td>{{ system.country }} ( {{ system.country_code }} ) <img src="{{ flags }}{{ system.country_code|lower }}.png"></td>
         </tr>
     </table>
     <h3>Project Resources <a href="{% url create_system_resource system.label %}" class="add">###</a></h3> 

@@ -34,7 +34,7 @@
     <table>
         {% for resource in project.resources.all %}
             <tr valign='top' class='table table-striped'>
-                <td width='400'><img src="{{ flags }}{{ resource.system.country_code }}.png"> <a href="{% url show_system_resource resource.system.label resource.id %}">{{ resource.system }}</a> 
+                <td width='400'><img src="{{ flags }}{{ resource.system.country_code|lower }}.png"> <a href="{% url show_system_resource resource.system.label resource.id %}">{{ resource.system }}</a> 
                 <td width='200' class="pull-right">
                     {% for protocol in resource.protocols.all %}
                         <a href="{{ protocol }}://{{ resource.system.label }}{{ resource.path }}">{{ protocol }}</a>  

@@ -4,7 +4,7 @@
     <div>
         <ul>
             {% for system in systems %}
-                <li> <img src="{{ flags }}{{ system.country_code }}.png"> <a href="{% url show_system system.label %}">{{ system.label }}</a> </li>
+                <li> <img src="{{ flags }}{{ system.country_code|lower }}.png"> <a href="{% url show_system system.label %}">{{ system.label }}</a> </li>
             {% endfor %}
         </ul>
     </div>
