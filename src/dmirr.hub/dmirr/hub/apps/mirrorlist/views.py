@@ -8,6 +8,21 @@ from dmirr.hub.lib.geo import get_geodata_by_ip, get_distance
 from dmirr.hub import db
 
 def get_location(city=None, region=None, country=None):
+    try:
+        city = unicode(city)
+    except UnicodeDecodeError as e:
+        city = None
+    
+    try:
+        region = unicode(region)
+    except UnicodeDecodeError as e:
+        region = None
+        
+    try:
+        country = unicode(country)
+    except UnicodeDecodeError as e:
+        country = None
+            
     if city and region and country:
         location = "%s, %s %s" % (city, region, country)
     elif region and country:
@@ -22,7 +37,7 @@ def mirrorlist(request):
     data = {}
     resources = []
     remote = request.environ[settings.DMIRR_REMOTE_ADDR_KEY]
-    
+
     client = get_geodata_by_ip(remote)
     repo = get_object_or_404(db.ProjectRepo, 
                              label=request.GET.get('repo', None))
@@ -66,10 +81,9 @@ def mirrorlist(request):
                                client.get('country_name', None))
             data['location'] = '%s (%s)' % (loc, remote)
             
-        data['location'] = data['location'].decode('utf-8')
         data['resources'] = resources
         cache.set(key, data)
-        
+    
     return render(request, 'mirrorlist/list.html', data, 
                   content_type='text/plain')
 
