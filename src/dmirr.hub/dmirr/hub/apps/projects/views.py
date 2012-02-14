@@ -74,7 +74,7 @@ def update(request, project):
 
 def show(request, project):
     data = {}
-    data['project'] = db.Project.objects.get(label=project)
+    data['project'] = get_object_or_404(db.Project, label=project)
     return render(request, 'projects/show.html', data)
 
 @login_required
