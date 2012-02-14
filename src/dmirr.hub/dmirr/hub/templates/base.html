@@ -118,7 +118,7 @@
                             </div>
                             <div class="modal-body">
                                 <p> 
-                                    <form action="{{ baseurl }}account/signin/" method="post" class="form-stacked">
+                                    <form action="{% url userena_signin %}" method="post" class="form-stacked">
                                         {% csrf_token %}
                                         <fieldset>
                                             <legend>Signin</legend>
