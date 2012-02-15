@@ -118,7 +118,7 @@ class UserResource(dMirrResource):
         resource_name = 'users'
         excludes = ['email', 'password', 'is_active', 'is_staff', 'is_superuser']
         filtering = {}
-        allowed_methods = ['get', 'put']
+        allowed_methods = ['get']
         
     def override_urls(self):
         return [
@@ -160,12 +160,26 @@ class ProjectResource(dMirrResource):
         resource_name = 'projects'
         excludes = []
         filtering = {}
-        allowed_methods = ['get', 'put', 'post', 'delete']
+        allowed_methods = ['get']
         validation = dMirrValidation(form_class=ProjectForm)
         
     def override_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/(?P<label>[a-zA-Z][\w\d_\.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+            url(r"^(?P<resource_name>%s)/(?P<label>[a-zA-Z][\w\d_\.-]+)/$" % \
+                self._meta.resource_name, 
+                self.wrap_view('dispatch_detail'), 
+                name="api_dispatch_detail"),
+            url(r"^(?P<resource_name>%s)/schema%s$" % \
+                (self._meta.resource_name, trailing_slash()), 
+                self.wrap_view('get_schema'), 
+                name="api_get_schema"),
+            url(r"^(?P<resource_name>%s)/set/(?P<pk_list>\w[\w/;-]*)/$" \
+                % self._meta.resource_name, 
+                self.wrap_view('get_multiple'), 
+                name="api_get_multiple"),
+            url(r"^(?P<resource_name>%s)/(?P<username>[a-zA-Z][\w\d_\.-]+)/$" \
+                % self._meta.resource_name, self.wrap_view('dispatch_detail'), 
+                  name="api_dispatch_detail"),
         ]
         
 v0_api = Api(api_name='v0')
