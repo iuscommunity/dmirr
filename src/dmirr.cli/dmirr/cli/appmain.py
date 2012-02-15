@@ -10,6 +10,7 @@ from dmirr.core import exc
 
 defaults = backend.defaults('dmirr')
 defaults['base']['extensions'].append('genshi')
+defaults['base']['extensions'].append('json')
 defaults['base']['output_handler'] = 'genshi'
 defaults['genshi'] = dict(
     template_module='dmirr.cli.templates',

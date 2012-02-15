@@ -1,5 +1,6 @@
 
 from django.db import models
+from tastypie.models import ApiKey
 from tastypie.models import create_api_key
 
 from django.contrib.auth.models import User, Group, Permission

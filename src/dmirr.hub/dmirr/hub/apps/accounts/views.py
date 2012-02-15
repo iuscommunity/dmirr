@@ -20,10 +20,10 @@ def show_api_key(request, user):
 def reset_api_key(request, user):
     data = {}
     user = get_object_or_404(db.User, username=user)
-    if user.api_key:
+    try:
         user.api_key.key = user.api_key.generate_key()
         user.api_key.save()
-    else:
+    except db.ApiKey.DoesNotExist:
         key = db.ApiKey(user=user)
         key.save()
         
