@@ -1,4 +1,0 @@
-recursive-include dmirr/public *
-include dmirr/public/favicon.ico
-recursive-include dmirr/i18n *
-recursive-include dmirr/templates *

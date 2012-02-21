@@ -34,11 +34,10 @@ class ProjectController(dMirrResourceController):
             ]
         defaults = {}
 
-    
     @controller.expose(help="create a new project")
     def create(self):
         self.validate_unique_resource(self.pargs.label)
-            
+
         if not self.pargs.user:
             self.pargs.user = self.config.get('base', 'hub_api_user')
         

@@ -191,8 +191,8 @@ CACHES = {
     'memcached': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': [
-            '172.19.26.240:11211',
-            '172.19.26.242:11211',
+            'cache1.example.com:11211',
+            'cache2.example.com:11211',
         ],
         'TIMEOUT': 28800,
         'OPTIONS': {

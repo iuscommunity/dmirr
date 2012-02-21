@@ -5,22 +5,6 @@ from pkg_resources import get_distribution
 from cement2.core import controller, hook
 from dmirr.core import exc
     
-#class dMirrRequestHandler(drest.RequestHandler):
-#    def request(self, *args, **kw):
-#        try:
-#            return super(dMirrRequestHandler, self).request(*args, **kw)
-#        except drest.exc.dRestRequestError as e:
-#            if e.response.status == 400:
-#                msg = "%s:\n" % e.msg
-#                msg = msg + "\n"
-#
-#                for key in e.content:
-#                    msg = msg + "    %s\n" % key
-#                    for error in e.content[key]:
-#                        msg = msg + "        - %s\n" % error
-#                raise exc.dMirrRequestError(msg)
-#            raise exc.dMirrRequestError(e.msg)
-        
 VERSION = get_distribution('dmirr.cli').version
 CEMENT_VERSION = get_distribution('cement2').version
 BANNER = """
@@ -55,8 +39,8 @@ class dMirrBaseController(controller.CementBaseController):
         super(dMirrBaseController, self).__init__()
         self.hub = None
         
-    def setup(self, *args, **kw):
-        super(dMirrBaseController, self).setup(*args, **kw)
+    def _setup(self, *args, **kw):
+        super(dMirrBaseController, self)._setup(*args, **kw)
         self.hub = drest.api.TastyPieAPI(
             self.config.get('base', 'hub_api_baseurl')
             )
@@ -64,13 +48,9 @@ class dMirrBaseController(controller.CementBaseController):
             user=self.config.get('base', 'hub_api_user'),
             api_key=self.config.get('base', 'hub_api_key'),    
             )
-        
-        # resources
-        #self.hub.add_resource('users')
-        #self.hub.add_resource('projects')
-        
+
         # this is only useful in resource controllers
-        self.resource = getattr(self.hub, self.Meta.label, None)
+        self.resource = getattr(self.hub, self._meta.label, None)
         
     @controller.expose(hide=True)
     def default(self):
@@ -79,7 +59,7 @@ class dMirrBaseController(controller.CementBaseController):
 class dMirrResourceController(dMirrBaseController):
     """
     This is a special controller to be subclassed from for any resource 
-    controllers.  It uses self.Meta.label as the resource, thereby eliminating
+    controllers.  It uses self._meta.label as the resource, thereby eliminating
     a lot of redundant code.
     
     """
@@ -88,30 +68,32 @@ class dMirrResourceController(dMirrBaseController):
     
     def validate_unique_resource(self, label):
         try:
-            assert label, "%s label required." % self.Meta.label.capitalize()
+            assert label, "%s label required." % self._meta.label.capitalize()
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
         try:
-            res_obj = getattr(self.hub, self.Meta.label)
-            response, project = res_obj.get(label)
+            response, project = self.resource.get(label)
             if not response.status == 410:
                 raise exc.dMirrArgumentError(
-                    "The %s '%s' already exists." % (resource, label)
+                    "The %s '%s' already exists." % (self.resource, label)
                     )
-        except exc.dMirrRequestError as e:
-            pass
+        except drest.exc.dRestRequestError as e:
+            if int(e.response.status) == 404:
+                return True
+            else:
+                raise
 
         return True
 
     @controller.expose(help="list all resources")
     def listall(self):
         """
-        Listall using self.Meta.label as the resource.
+        Listall using self._meta.label as the resource.
         """
         response, data = self.resource.get()
         for obj in data['objects']:
-            if self.Meta.label == 'users':
+            if self._meta.label == 'users':
                 print obj['username']
             else:
                 print obj['label']
@@ -120,26 +102,26 @@ class dMirrResourceController(dMirrBaseController):
     def show(self):
         try:
             assert self.pargs.resource, \
-                "%s label required." % self.Meta.label.capitalize()
+                "%s label required." % self._meta.label.capitalize()
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
         response, data = self.resource.get(self.pargs.resource)
 
-        print self.render(data, '%s/show.txt' % self.Meta.label)
+        print self.render(data, '%s/show.txt' % self._meta.label)
 
     @controller.expose(help="delete an existing resource")    
     def delete(self):
         res = raw_input("Are you sure you want to delete the %s %s: [y/N] " % \
-                       (self.Meta.label, self.pargs.resource)).strip()
+                       (self._meta.label, self.pargs.resource)).strip()
                        
         try:
             assert self.pargs.resource, \
-                "%s label required." % self.Meta.label.capitalize()
+                "%s label required." % self._meta.label.capitalize()
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
 
         if res.lower() in ['yes', 'y', '1']:
             self.resource.delete(self.pargs.resource)
             self.log.info("Deleted the %s %s" % \
-                         (self.Meta.label, self.pargs.resource))
+                         (self._meta.label, self.pargs.resource))
