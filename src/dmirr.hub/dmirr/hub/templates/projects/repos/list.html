@@ -3,7 +3,7 @@
 {% block content_body %}
     {% for repo in repos %}
         <ul>
-            <li><a href="{% url show_repo project.label repo.label %}">{{ repo.display_name }}</a></li>
+            <li><a href="{% url show_project_repo project.label repo.label %}">{{ repo.display_name }}</a></li>
         </ul>
     {% endfor %}
 {% endblock %}
