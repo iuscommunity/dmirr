@@ -92,7 +92,14 @@ class dMirrBaseController(controller.CementBaseController):
         
     @controller.expose(hide=True)
     def default(self):
-        raise exc.dMirrArgumentError('A sub-command is required.  See: --help')
+        if not self.app.argv or self.app.argv[0].startswith('-'):
+            raise exc.dMirrArgumentError(
+                "A sub-command is required.  " + \
+                "Try: 'dmirr %s --help'." % self._meta.label)
+        else:
+            raise exc.dMirrArgumentError(
+                "Unknown sub-command '%s'.  " % self.app.argv[0] + \
+                "Try: 'dmirr %s --help'." % self._meta.label)
     
 class dMirrResourceController(dMirrBaseController):
     """
@@ -149,13 +156,18 @@ class dMirrResourceController(dMirrBaseController):
         if 'description' in data:
             data['description'] = paginate('%16s' % ' ', 50, data['description'])
             
+        data['response'] = response
         print self.render(data, '%s/show.txt' % self._meta.label)
 
     @controller.expose(help="delete an existing resource")    
     def delete(self):
         response, data = self.resource.get(self.pargs.resource)
-        res = raw_input("Really delete '%s' and all associated data? [y/N] " % \
-                        self.pargs.resource).strip()
+        if self.pargs.no_prompt:
+            res = 'yes'
+        else:
+            msg = "Really delete '%s' and all associated data? [y/N] " % \
+                   self.pargs.resource
+            res = raw_input(msg).strip()
                        
         try:
             assert self.pargs.resource, "Resource argument required."
@@ -164,5 +176,4 @@ class dMirrResourceController(dMirrBaseController):
 
         if res.lower() in ['yes', 'y', '1']:
             self.resource.delete(self.pargs.resource)
-            self.log.info("Deleted the %s %s" % \
-                         (self._meta.label, self.pargs.resource))
+            self.log.info("Permanently deleted '%s'" % self.pargs.resource)

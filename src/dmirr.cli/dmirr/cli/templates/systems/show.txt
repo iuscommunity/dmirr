@@ -1,0 +1,16 @@
+
+            ID : ${id}
+         Label : ${label}
+          User : ${user['username']}
+   Create Date : ${create_date}
+   Update Date : ${update_date}
+  Resource URI : ${resource_uri}
+          City : ${city}
+        Region : ${region}
+       Country : ${country}
+   Postal Code : ${postal_code}
+       IP ADDR : ${ip}
+    Lat / Long : (${latitude}, ${longitude})
+  Contact Name : ${contact_name}
+ Contact Email : ${contact_email}
+        Online : ${online}

@@ -1,12 +1,12 @@
+
 from cement2.core import controller
 from dmirr.cli.controllers.base import dMirrResourceController
 from dmirr.core import exc
 
-class UserController(dMirrResourceController):
+class SystemController(dMirrResourceController):
     class Meta:
-        interface = controller.IController
-        label = 'users'
-        description = 'dMirr User Resource Client Interface'
+        label = 'systems'
+        description = 'dMirr Systems Controller'
         arguments = [
             (['resource'], 
              dict(action='store', nargs='?',

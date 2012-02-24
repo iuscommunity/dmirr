@@ -29,6 +29,7 @@ def main():
         
     try:
         app.run()
+
     except cement_exc.CementSignalError as e:
         pass
     except cement_exc.CementRuntimeError as e:
@@ -60,7 +61,8 @@ def main():
         print "dMirrAPIError => %s" % e.msg
     finally:
         app.close()
-        sys.exit(RETCODE)
+    
+    sys.exit(RETCODE)
 
 def test_main(argv=[]):
     import tempfile

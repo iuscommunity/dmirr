@@ -8,7 +8,7 @@ class ProjectController(dMirrResourceController):
     class Meta:
         interface = controller.IController
         label = 'projects'
-        description = 'dMirr Project Resource Client Interface'
+        description = 'dMirr Projects Controller'
         arguments = [
             (['-l', '--label'], 
              dict(action='store', dest='label', metavar='STR',
@@ -31,6 +31,9 @@ class ProjectController(dMirrResourceController):
             (['resource'], 
              dict(action='store', nargs='?',
                   help='the label of the resource to work with')), 
+            (['-y', '--no-prompt'], 
+             dict(dest='no_prompt', action='store_true', 
+                  help='do not prompt for approval')),
             ]
         defaults = {}
 
@@ -72,8 +75,8 @@ class ProjectController(dMirrResourceController):
             raise exc.dMirrArgumentError, e.args[0]
             
         response, project = self.hub.projects.get(self.pargs.resource)
-        project = project.copy()
-        for key in project:
+        _project = project.copy()
+        for key in _project:
             if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
                 if key == 'user':
                     _, user = self.hub.users.get(pargs.user)
