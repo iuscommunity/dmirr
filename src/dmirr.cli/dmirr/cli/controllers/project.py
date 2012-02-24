@@ -30,7 +30,7 @@ class ProjectController(dMirrResourceController):
                   help='full URL path')),
             (['resource'], 
              dict(action='store', nargs='?',
-                  help='resource label to work with')), 
+                  help='the label of the resource to work with')), 
             ]
         defaults = {}
 
@@ -59,8 +59,8 @@ class ProjectController(dMirrResourceController):
             )
         
         response, data = self.hub.projects.create(params=project)
-        if int(response['status']) != 201:
-            print data['error_message']
+        #if int(response['status']) != 201:
+        #    print data['error_message']
 
         self.app.log.info("Project %s created." % self.pargs.label)
         

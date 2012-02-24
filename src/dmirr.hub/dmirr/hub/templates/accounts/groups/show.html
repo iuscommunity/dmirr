@@ -3,11 +3,11 @@
 {% block content_title %}<h2>Groups</h2>{% endblock %}
 
 {% block content_body %}
-    <h3>{{ group.name }} {% if group in user.profile.managed_groups %}<small><a href="{% url update_group group.id %}" class="update">###</a></small>{% endif %}</h3>
-    <h4>Users {% if group in request.user.profile.managed_groups %}<a href="{% url add_user_to_group group.id %}" class="add">###</a>{% endif %}</h4>
+    <h3>{{ group.name }} {% if group in user.profile.managed_groups.all %}<small><a href="{% url update_group group.id %}" class="update">###</a></small>{% endif %}</h3>
+    <h4>Users {% if group in user.profile.managed_groups.all %}<a href="{% url add_user_to_group group.id %}" class="add">###</a>{% endif %}</h4>
     <ul>
-        {% for user in group.user_set.all %}
-            <li> <a href="{% url userena_profile_detail user.username %}">{{ user.profile.display_name }}</a> {% if group in request.user.profile.managed_groups %}<a href="{% url remove_user_from_group group.id %}?user={{ user.username }}" class="delete">###</a>{% endif %}</i>
+        {% for user_ in group.user_set.all %}
+            <li> <a href="{% url userena_profile_detail user_.username %}">{{ user_.profile.display_name }}</a> {% if group in user.profile.managed_groups.all %}<a href="{% url remove_user_from_group group.id %}?user={{ user_.username }}" class="delete">###</a>{% endif %}</i>
         {% endfor %}
     </ul>
     

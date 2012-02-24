@@ -21,6 +21,7 @@ defaults['log'] = dict(
             
 def main():
     app = foundation.lay_cement('dmirr', defaults=defaults)
+    RETCODE = 0
     
     from dmirr.cli.bootstrap import base
     
@@ -31,21 +32,35 @@ def main():
     except cement_exc.CementSignalError as e:
         pass
     except cement_exc.CementRuntimeError as e:
+        RETCODE = 1
         print e
     except exc.dMirrRuntimeError as e:
+        RETCODE = 1
         print e
     except cement_exc.CementArgumentError as e:
+        RETCODE = 1
         print e
     except exc.dMirrArgumentError as e:
+        RETCODE = 1
         print e
     except exc.dMirrAPIError as e:
-        print e
+        RETCODE = 1
+        data = dict(exception=e.msg, errors=e.errors)
+        
+        try:
+            print app.render(data, 'errors.txt')
+        except IOError as e:
+            print e
+        
     except drest.exc.dRestRequestError as e:
+        RETCODE = 1
         print "dMirrAPIError => %s" % e.msg
     except drest.exc.dRestAPIError as e:
+        RETCODE = 1
         print "dMirrAPIError => %s" % e.msg
     finally:
         app.close()
+        sys.exit(RETCODE)
 
 def test_main(argv=[]):
     import tempfile

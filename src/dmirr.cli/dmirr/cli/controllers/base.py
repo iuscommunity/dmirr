@@ -21,6 +21,39 @@ Distributed under the GNU GPL v2 License
 http://github.com/rackspace/dmirr
 """ % (VERSION, CEMENT_VERSION)
     
+class dMirrRequestHandler(drest.request.TastyPieRequestHandler):
+    def handle_response(self, response, content):
+        if (400 <= int(response.status) <=499) or (response.status == 500):
+            msg = "Received HTTP Code %s - %s" % (
+                   response.status, 
+                   httplib.responses[int(response.status)])
+            if int(response.status) == 400:
+                raise exc.dMirrAPIError(msg, errors=content)
+
+            raise drest.exc.dRestRequestError(
+                msg, response=response, content=content
+                )
+            
+        return (response, content)
+        
+class dMirrAPI(drest.api.TastyPieAPI):
+    class Meta:
+        request = dMirrRequestHandler
+        
+def paginate(prefix, line_length, text):
+    line = ''
+    new_text = ''
+    for word in text.split():
+        if len(line) + len(word) > int(line_length):
+            new_text = "%s %s %s\n%s" % (new_text, line, word, prefix)
+            line = ''
+        else:
+            if line == '':
+                line = word
+            else:
+                line = "%s %s" % (line, word)        
+    return new_text.strip()
+    
 class dMirrBaseController(controller.CementBaseController):
     class Meta:
         interface = controller.IController
@@ -41,7 +74,7 @@ class dMirrBaseController(controller.CementBaseController):
         
     def _setup(self, *args, **kw):
         super(dMirrBaseController, self)._setup(*args, **kw)
-        self.hub = drest.api.TastyPieAPI(
+        self.hub = dMirrAPI(
             self.config.get('base', 'hub_api_baseurl')
             )
         self.hub.auth(
@@ -51,6 +84,11 @@ class dMirrBaseController(controller.CementBaseController):
 
         # this is only useful in resource controllers
         self.resource = getattr(self.hub, self._meta.label, None)
+        
+    @controller.expose(help="show the api users info")
+    def whoami(self):
+        response, user = self.hub.users.get(self.config.get('base', 'hub_api_user'))
+        print self.render(user, 'users/show.txt')
         
     @controller.expose(hide=True)
     def default(self):
@@ -65,10 +103,10 @@ class dMirrResourceController(dMirrBaseController):
     """
     def __init__(self):
         super(dMirrResourceController, self).__init__()
-    
+
     def validate_unique_resource(self, label):
         try:
-            assert label, "%s label required." % self._meta.label.capitalize()
+            assert label, "Label required (-l, --label)."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
@@ -76,7 +114,8 @@ class dMirrResourceController(dMirrBaseController):
             response, project = self.resource.get(label)
             if not response.status == 410:
                 raise exc.dMirrArgumentError(
-                    "The %s '%s' already exists." % (self.resource, label)
+                    "The resource '%s/%s/' already exists." % \
+                        (self._meta.label, label)
                     )
         except drest.exc.dRestRequestError as e:
             if int(e.response.status) == 404:
@@ -101,23 +140,25 @@ class dMirrResourceController(dMirrBaseController):
     @controller.expose(help="show all resource data")
     def show(self):
         try:
-            assert self.pargs.resource, \
-                "%s label required." % self._meta.label.capitalize()
+            assert self.pargs.resource, "Resource argument required."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
             
         response, data = self.resource.get(self.pargs.resource)
 
+        if 'description' in data:
+            data['description'] = paginate('%16s' % ' ', 50, data['description'])
+            
         print self.render(data, '%s/show.txt' % self._meta.label)
 
     @controller.expose(help="delete an existing resource")    
     def delete(self):
-        res = raw_input("Are you sure you want to delete the %s %s: [y/N] " % \
-                       (self._meta.label, self.pargs.resource)).strip()
+        response, data = self.resource.get(self.pargs.resource)
+        res = raw_input("Really delete '%s' and all associated data? [y/N] " % \
+                        self.pargs.resource).strip()
                        
         try:
-            assert self.pargs.resource, \
-                "%s label required." % self._meta.label.capitalize()
+            assert self.pargs.resource, "Resource argument required."
         except AssertionError, e:
             raise exc.dMirrArgumentError, e.args[0]
 

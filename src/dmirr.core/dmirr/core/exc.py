@@ -28,6 +28,20 @@ class dMirrArgumentError(dMirrError):
         super(dMirrArgumentError, self).__init__(msg)
 
 class dMirrAPIError(dMirrError):
-    """API connection errors."""
-    def __init__(self, msg):
+    """
+    API connection errors.
+        
+    Required Arguments:
+    
+        msg
+            The error message
+    
+    Optional Arguments:
+    
+        errors
+            Form errors returned from dMirr API Form Validation.
+            
+    """
+    def __init__(self, msg, errors=[]):
         super(dMirrAPIError, self).__init__(msg)
+        self.errors = errors

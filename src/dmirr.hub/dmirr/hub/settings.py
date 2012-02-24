@@ -188,25 +188,6 @@ INSTALLED_APPS = (
     )
 
 CACHES = {
-    'memcached': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': [
-            'cache1.example.com:11211',
-            'cache2.example.com:11211',
-        ],
-        'TIMEOUT': 28800,
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000,
-            }
-    },
-    'locmem': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-        'TIMEOUT': 28800,
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000,
-            }
-    },
     'dummy': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }

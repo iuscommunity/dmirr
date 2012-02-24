@@ -10,11 +10,42 @@ from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
 from tastypie.api import Api
 from tastypie.utils import trailing_slash
+from tastypie.exceptions import ImmediateHttpResponse
 
 from dmirr.hub import db
 from dmirr.hub.apps.projects.forms import ProjectForm
      
+def check_perm(request, obj, perm, raise_on_fail=True):
+    if not request.user.has_perm(perm, obj):
+        if raise_on_fail:
+            raise ImmediateHttpResponse(response=HttpUnauthorized())
+        else:
+            return False
+    return True
 
+def check_user_is_admin(request, obj, raise_on_fail=False):
+    if request.user == obj.user:
+        return True
+    elif hasattr(obj, 'admin_group') and obj.admin_group:
+        if request.user in obj.admin_group.user_set():
+            return True
+
+    if raise_on_fail:
+        raise ImmediateHttpResponse(response=HttpUnauthorized())
+    else:
+        return False
+    
+def check_admin_group(request, obj, raise_on_fail=True):
+    if not hasattr(obj, 'admin_group'):
+        return True
+    elif not obj.admin_group:
+        return True
+    elif obj.admin_group not in request.user.groups.all():
+        if raise_on_fail:
+            raise ImmediateHttpResponse(response=HttpUnauthorized())
+        else:
+            return False
+                        
 class dMirrValidation(FormValidation):
     """
     Override tastypie's standard ``FormValidation`` since this does not care
@@ -32,7 +63,6 @@ class dMirrValidation(FormValidation):
 
         Also handles lists of URIs
         """
-
         if uri is None:
             return None
 
@@ -55,7 +85,7 @@ class dMirrValidation(FormValidation):
 
     def is_valid(self, bundle, request=None):
         data = bundle.data
-
+        
         # Ensure we get a bound Form, regardless of the state of the bundle.
         if data is None:
             data = {}
@@ -70,7 +100,11 @@ class dMirrValidation(FormValidation):
 
         for field in relation_fields:
             if field in data:
-                data[field] = self.uri_to_pk(data[field])
+                if type(data[field]) == dict:
+                    data[field] = self.uri_to_pk(data[field]['resource_uri'])
+                else:
+                    data[field] = self.uri_to_pk(data[field])
+
 
         # validate and return messages on error
         if request.method == 'POST':    
@@ -80,7 +114,6 @@ class dMirrValidation(FormValidation):
             ### Look at: https://github.com/toastdriven/django-tastypie/issues/152
             obj = self.form_class.Meta.model.objects.get(pk=data['resource_pk'])
             form = self.form_class(data, instance=obj)
-            
         if form.is_valid():
             return {}
             
@@ -160,7 +193,7 @@ class ProjectResource(dMirrResource):
         resource_name = 'projects'
         excludes = []
         filtering = {}
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'put', 'post', 'delete']
         validation = dMirrValidation(form_class=ProjectForm)
         
     def override_urls(self):
@@ -181,6 +214,43 @@ class ProjectResource(dMirrResource):
                 % self._meta.resource_name, self.wrap_view('dispatch_detail'), 
                   name="api_dispatch_detail"),
         ]
+        
+    def apply_authorization_limits(self, request, object_list):
+        return_objects = []        
+        create_perm = '%s.create_%s' % (self._meta.resource_name, 
+                                        self._meta.resource_name.rstrip('s'))
+        change_perm = '%s.change_%s' % (self._meta.resource_name, 
+                                        self._meta.resource_name.rstrip('s'))
+        delete_perm = '%s.delete_%s' % (self._meta.resource_name, 
+                                        self._meta.resource_name.rstrip('s'))
+                                      
+        for obj in object_list:
+            if request.method == 'GET':
+                pass                         
+                
+            elif request.method == 'POST':
+                check_perm(request, obj, create_perm)
+                check_perm(request, obj.user, 'auth.change_user')
+                check_admin_group(request, obj)
+                
+            elif request.method == 'PUT':
+                check_perm(request, obj, change_perm)
+                
+                # skip all other checks if user is an admin of the obj
+                # otherwise the next check might fail on the user perm
+                if check_user_is_admin(request, obj):
+                    return_objects.append(obj)
+                    continue
+                    
+                check_perm(request, obj.user, 'auth.change_user')
+                check_admin_group(request, obj)
+                    
+            elif request.method == 'DELETE':
+                check_perm(request, obj, delete_perm)
+            
+            return_objects.append(obj)
+                  
+        return return_objects
         
 v0_api = Api(api_name='v0')
 v0_api.register(UserResource())
