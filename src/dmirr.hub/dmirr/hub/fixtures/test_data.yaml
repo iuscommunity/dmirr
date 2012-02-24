@@ -65,7 +65,14 @@
       activation_key: ALREADY_ACTIVATED
       last_active: 2008-09-04 14:25:29
       activation_notification_send: false
-      
+
+- model: accounts.userprofile      
+  pk: -1
+  fields:
+      mugshot: ""
+      privacy: registered
+      user: -1
+            
 - model: accounts.userprofile      
   pk: 1
   fields:

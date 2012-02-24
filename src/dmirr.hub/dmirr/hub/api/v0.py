@@ -17,15 +17,26 @@ from dmirr.hub.apps.projects.forms import ProjectForm
 from dmirr.hub.apps.archs.forms import ArchForm
 from dmirr.hub.apps.protocols.forms import ProtocolForm
 from dmirr.hub.apps.systems.forms import SystemForm
-     
-def check_perm(request, obj, perm, raise_on_fail=True):
-    if not request.user.has_perm(perm, obj):
-        if raise_on_fail:
-            raise ImmediateHttpResponse(response=HttpUnauthorized())
-        else:
-            return False
-    return True
+    
 
+def check_perm(request, perm, obj=None, raise_on_fail=True):
+    fail = False
+    
+    if obj:
+        if not request.user.has_perm(perm, obj):
+            fail = True
+    else:
+        if not request.user.has_perm(perm):
+            fail = True
+        
+    if fail and raise_on_fail:
+        raise ImmediateHttpResponse(response=HttpUnauthorized())
+    elif fail:
+        return False
+    else:
+        return True
+
+"""
 def check_user_is_admin(request, obj, raise_on_fail=False):
     if request.user == obj.user:
         return True
@@ -48,7 +59,8 @@ def check_admin_group(request, obj, raise_on_fail=True):
             raise ImmediateHttpResponse(response=HttpUnauthorized())
         else:
             return False
-                        
+""" 
+                     
 class dMirrValidation(FormValidation):
     """
     Override tastypie's standard ``FormValidation`` since this does not care
@@ -127,10 +139,6 @@ class dMirrAuthorization(Authorization):
     def __init__(self):
         super(dMirrAuthorization, self).__init__()
         
-    def apply_limits(self, request, object_list):
-        #request.user.has_perm('projects.change_project')
-        return object_list
-        
 class dMirrAuthentication(ApiKeyAuthentication):
     def __init__(self):
         super(dMirrAuthentication, self).__init__()
@@ -151,31 +159,13 @@ class dMirrResource(ModelResource):
     def dehydrate(self, bundle):
         bundle.data['resource_pk'] = bundle.obj.id
         return bundle
-
-    def __init__(self, *args, **kw):
-        super(dMirrResource, self).__init__(*args, **kw)
-        if not hasattr(self._meta, 'create_perm'):
-            self._meta.create_perm = '%s.create_%s' % (
-                self._meta.resource_name, 
-                self._meta.resource_name.rstrip('s')
-                )
-        if not hasattr(self._meta, 'change_perm'):
-            self._meta.change_perm = '%s.change_%s' % (
-                self._meta.resource_name, 
-                self._meta.resource_name.rstrip('s')
-                )
-        if not hasattr(self._meta, 'delete_perm'):
-            self._meta.delete_perm = '%s.delete_%s' % (
-                self._meta.resource_name, 
-                self._meta.resource_name.rstrip('s')
-                )
                                         
     def override_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/(?P<label>[a-zA-Z][\w\d_\.-]+)/$" % \
-                self._meta.resource_name, 
-                self.wrap_view('dispatch_detail'), 
-                name="api_dispatch_detail"),
+            url(r"^(?P<resource_name>%s)%s$" % \
+               (self._meta.resource_name, trailing_slash()), 
+                self.wrap_view('dispatch_list'), 
+                name="api_dispatch_list"),
             url(r"^(?P<resource_name>%s)/schema%s$" % \
                 (self._meta.resource_name, trailing_slash()), 
                 self.wrap_view('get_schema'), 
@@ -184,39 +174,11 @@ class dMirrResource(ModelResource):
                 % self._meta.resource_name, 
                 self.wrap_view('get_multiple'), 
                 name="api_get_multiple"),
+            url(r"^(?P<resource_name>%s)/(?P<label>[a-zA-Z][\w\d_\.-]+)/$" % \
+                self._meta.resource_name, 
+                self.wrap_view('dispatch_detail'), 
+                name="api_dispatch_detail"),
         ]
-        
-    def apply_authorization_limits(self, request, object_list):
-        return_objects = []        
-        for obj in object_list:
-            if request.method == 'GET':
-                pass                         
-                
-            elif request.method == 'POST':
-                check_perm(request, obj, self._meta.create_perm)
-                if hasattr(obj, 'user'):
-                    check_perm(request, obj.user, 'auth.change_user')
-                check_admin_group(request, obj)
-                
-            elif request.method == 'PUT':
-                check_perm(request, obj, self._meta.change_perm)
-                
-                # skip all other checks if user is an admin of the obj
-                # otherwise the next check might fail on the user perm
-                if hasattr(obj, 'user') and check_user_is_admin(request, obj):
-                    return_objects.append(obj)
-                    continue
-                    
-                if hasattr(obj, 'user'):
-                    check_perm(request, obj.user, 'auth.change_user')
-                check_admin_group(request, obj)
-                    
-            elif request.method == 'DELETE':
-                check_perm(request, obj, self._meta.delete_perm)
-            
-            return_objects.append(obj)
-                  
-        return return_objects
         
 class UserResource(dMirrResource):    
     profile = fields.ToOneField('dmirr.hub.api.v0.UserProfileResource', 
@@ -230,7 +192,7 @@ class UserResource(dMirrResource):
             'password', 
             'is_active', 
             'is_staff', 
-            'is_superuser'
+            'is_superuser',
             ]
         
     def override_urls(self):
@@ -258,7 +220,7 @@ class UserResource(dMirrResource):
             return bundle.obj.email
         else:
             return '************'
-            
+         
 class UserProfileResource(dMirrResource):
     class Meta(dMirrMeta):
         queryset = db.UserProfile.objects.all()
@@ -281,7 +243,7 @@ class ProjectResource(dMirrResource):
         queryset = db.Project.objects.all()
         resource_name = 'projects'
         validation = dMirrValidation(form_class=ProjectForm)
-
+        
 class ArchResource(dMirrResource):
     class Meta(dMirrMeta):
         queryset = db.Arch.objects.all()
@@ -301,11 +263,11 @@ class SystemResource(dMirrResource):
         queryset = db.System.objects.all()
         resource_name = 'systems'
         validation = dMirrValidation(form_class=SystemForm)
-
+"""
     def _hide_data(self, bundle, field):
         res = check_perm(bundle.request, 
-                         bundle.obj, 
                          self._meta.change_perm, 
+                         bundle.obj, 
                          False)
         if not res:
             return '************'
@@ -317,7 +279,8 @@ class SystemResource(dMirrResource):
 
     def dehydrate_contact_email(self, bundle):
         return self._hide_data(bundle, bundle.obj.contact_email)
-        
+"""
+     
 v0_api = Api(api_name='v0')
 v0_api.register(UserResource())
 v0_api.register(UserProfileResource())

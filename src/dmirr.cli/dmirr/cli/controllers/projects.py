@@ -38,7 +38,7 @@ class ProjectController(dMirrResourceController):
         defaults = {}
 
     @controller.expose(help="create a new project")
-    def create(self):
+    def create2(self):
         self.validate_unique_resource(self.pargs.label)
 
         if not self.pargs.user:
@@ -79,7 +79,7 @@ class ProjectController(dMirrResourceController):
         for key in _project:
             if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
                 if key == 'user':
-                    _, user = self.hub.users.get(pargs.user)
+                    _, user = self.hub.users.get(self.pargs.user)
                     project['user'] = user
                 else:
                     project[key] = getattr(self.pargs, key)

@@ -67,7 +67,7 @@ class System(models.Model):
         return unicode(self.display_name)
     
     def __str__(self):
-        return self.self.display_name
+        return self.display_name
 
 class SystemResource(models.Model):
     class Meta:

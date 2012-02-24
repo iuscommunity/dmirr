@@ -53,27 +53,14 @@ def paginate(prefix, line_length, text):
             else:
                 line = "%s %s" % (line, word)        
     return new_text.strip()
-    
-class dMirrBaseController(controller.CementBaseController):
-    class Meta:
-        interface = controller.IController
-        label = 'base'
-        description = 'dMirr Command Line Interface'
-        arguments = [
-            (['--version'], dict(action='version', version=BANNER)),
-            ]
-        defaults = dict(
-            hub_api_baseurl='http://dmirr.example.com',
-            hub_api_user='',
-            hub_api_key='',
-            )
-        
+
+class dMirrAbstractBaseController(controller.CementBaseController):
     def __init__(self):
-        super(dMirrBaseController, self).__init__()
+        super(dMirrAbstractBaseController, self).__init__()
         self.hub = None
         
     def _setup(self, *args, **kw):
-        super(dMirrBaseController, self)._setup(*args, **kw)
+        super(dMirrAbstractBaseController, self)._setup(*args, **kw)
         self.hub = dMirrAPI(
             self.config.get('base', 'hub_api_baseurl')
             )
@@ -84,7 +71,20 @@ class dMirrBaseController(controller.CementBaseController):
 
         # this is only useful in resource controllers
         self.resource = getattr(self.hub, self._meta.label, None)
-        
+              
+class dMirrBaseController(dMirrAbstractBaseController):
+    class Meta:
+        label = 'base'
+        description = 'dMirr Command Line Interface'
+        arguments = [
+            (['--version'], dict(action='version', version=BANNER)),
+            ]
+        defaults = dict(
+            hub_api_baseurl='http://dmirr.example.com',
+            hub_api_user='',
+            hub_api_key='',
+            )
+    
     @controller.expose(help="show the api users info")
     def whoami(self):
         response, user = self.hub.users.get(self.config.get('base', 'hub_api_user'))
@@ -101,7 +101,7 @@ class dMirrBaseController(controller.CementBaseController):
                 "Unknown sub-command '%s'.  " % self.app.argv[0] + \
                 "Try: 'dmirr %s --help'." % self._meta.label)
     
-class dMirrResourceController(dMirrBaseController):
+class dMirrResourceController(dMirrAbstractBaseController):
     """
     This is a special controller to be subclassed from for any resource 
     controllers.  It uses self._meta.label as the resource, thereby eliminating
@@ -177,3 +177,38 @@ class dMirrResourceController(dMirrBaseController):
         if res.lower() in ['yes', 'y', '1']:
             self.resource.delete(self.pargs.resource)
             self.log.info("Permanently deleted '%s'" % self.pargs.resource)
+
+    @controller.expose(help="create a new resource", hide=True)
+    def create(self):
+        self.validate_unique_resource(self.pargs.label)
+        
+        data = dict()
+        for key in self.resource.schema['fields']:
+            if key == 'user':
+                if not self.pargs.user:
+                    self.pargs.user = self.config.get('base', 'hub_api_user')
+                response, user = self.hub.users.get(self.pargs.user)
+                self.pargs.user = user['resource_uri']
+                
+            if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
+                data[key] = getattr(self.pargs, key)
+
+        self.resource.create(data)
+        self.log.info("Created '%s'." % self.pargs.label)
+        
+    @controller.expose(help="update an existing resource")
+    def update(self):
+        try:
+            assert self.pargs.resource, "Resource argument required."
+        except AssertionError, e:
+            raise exc.dMirrArgumentError, e.args[0]
+            
+        response, data = self.resource.get(self.pargs.resource)
+        _data = data.copy()
+        for key in _data:
+            if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
+                data[key] = getattr(self.pargs, key)
+                    
+        self.resource.update(data['id'], data)
+        self.app.log.info("Updated '%s'." % data['label'])
+    

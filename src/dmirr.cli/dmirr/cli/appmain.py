@@ -52,10 +52,11 @@ def main():
             print app.render(data, 'errors.txt')
         except IOError as e:
             print e
-        
+
     except drest.exc.dRestRequestError as e:
         RETCODE = 1
         print "dMirrAPIError => %s" % e.msg
+        print e.content
     except drest.exc.dRestAPIError as e:
         RETCODE = 1
         print "dMirrAPIError => %s" % e.msg

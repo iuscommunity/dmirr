@@ -10,7 +10,7 @@ class ArchController(dMirrResourceController):
         arguments = [
             (['-l', '--label'], 
              dict(action='store', dest='label', metavar='STR',
-                  help='project label (unique identifier)')),
+                  help='arch label (unique identifier)')),
             (['resource'], 
              dict(action='store', nargs='?',
                   help='resource label to work with')), 
@@ -27,19 +27,3 @@ class ArchController(dMirrResourceController):
         response, data = self.hub.archs.create(arch)
         self.app.log.info("Arch '%s' created." % arch['label'])
         
-    @controller.expose(help="update an existing arch resource")
-    def update(self):
-        try:
-            assert self.pargs.resource, "Arch resource argument required."
-        except AssertionError, e:
-            raise exc.dMirrArgumentError, e.args[0]
-            
-        response, arch = self.hub.archs.get(self.pargs.resource)
-        _arch = arch.copy()
-        for key in _arch:
-            if hasattr(self.pargs, key) and getattr(self.pargs, key, None):
-                arch[key] = getattr(self.pargs, key)
-                    
-        self.hub.archs.update(arch['id'], arch)
-        self.app.log.info("Arch '%s' update." % arch['label'])
-    
