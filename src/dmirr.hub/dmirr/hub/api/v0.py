@@ -16,7 +16,7 @@ from dmirr.hub import db
 from dmirr.hub.apps.projects.forms import ProjectForm
 from dmirr.hub.apps.archs.forms import ArchForm
 from dmirr.hub.apps.protocols.forms import ProtocolForm
-from dmirr.hub.apps.systems.forms import SystemForm
+from dmirr.hub.apps.systems.forms import SystemForm, SystemResourceForm
     
 
 def check_perm(request, perm, obj=None, raise_on_fail=True):
@@ -256,6 +256,7 @@ class ProtocolResource(dMirrResource):
         resource_name = 'protocols'
         validation = dMirrValidation(form_class=ProtocolForm)
 
+
 class SystemResource(dMirrResource):
     user = fields.ToOneField(UserResource, 'user', full=True)
     
@@ -280,6 +281,16 @@ class SystemResource(dMirrResource):
     def dehydrate_contact_email(self, bundle):
         return self._hide_data(bundle, bundle.obj.contact_email)
 """
+class SystemResourceResource(dMirrResource):
+    user = fields.ToOneField(UserResource, 'user', full=True)
+    system = fields.ToOneField(SystemResource, 'system', full=True)
+    project = fields.ToOneField(ProjectResource, 'project', full=True)
+    protocols = fields.ToManyField(ProtocolResource, 'protocols', full=True)
+
+    class Meta(dMirrMeta):
+        queryset = db.SystemResource.objects.all()
+        resource_name = 'systemresource'
+        validation = dMirrValidation(form_class=SystemResourceForm)
      
 v0_api = Api(api_name='v0')
 v0_api.register(UserResource())
@@ -288,3 +299,4 @@ v0_api.register(ProjectResource())
 v0_api.register(ArchResource())
 v0_api.register(ProtocolResource())
 v0_api.register(SystemResource())
+v0_api.register(SystemResourceResource())
