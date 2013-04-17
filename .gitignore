@@ -33,3 +33,4 @@ dmirr_dev.db
 GeoIP.dat
 GeoLiteCity.dat
 settings_local.py
+.idea

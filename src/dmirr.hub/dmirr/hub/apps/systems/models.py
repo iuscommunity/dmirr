@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.core.validators import ValidationError
 import socket
 
-from dmirr.hub.lib.geo import get_geodata_by_ip
+from dmirr.hub.lib.geo import get_geodata_by_ip, get_geodata_by_region
 from dmirr.hub.apps.protocols.models import Protocol
 from dmirr.hub.apps.projects.models import Project
 
@@ -40,17 +40,45 @@ class System(models.Model):
     def save(self):
         '''custom save function to pull geoip'''
 
-        # extract the domain from Repo URL and then resolve said domain
         ip = socket.gethostbyname(self.label)
-        geodata = get_geodata_by_ip(ip)
+
+        # extract the domain from Repo URL and then resolve said domain
+        if self.country:
+            args = []
+            if self.city:
+                args.append(self.city)
+            if self.region:
+                args.append(self.region)
+            args.append(self.country)
+
+            # Attempt lookup using GeoPy
+            geodata = get_geodata_by_region(*args)
+            try:
+                self.longitude = geodata[1][0]
+                self.latitude = geodata[1][1]
+            except IndexError, e:
+                raise IndexError("Unable to extract longitude and latitude from %s" % geodata)
+
+            try:
+                location = geodata[0].split(', ')
+                self.country_code = location[2]
+            except IndexError:
+                raise IndexError("Unable to extract country_code from %s" % geodata)
+
+        else:
+            # Attempt lookup using GeoData
+            geodata = get_geodata_by_ip(ip)
+            if not geodata:
+                raise ValidationError('Unable to determine location from IP address, please enter manually')
+            self.country = geodata.get('country_name', None)
+            self.country_code = geodata.get('country_code', None)
+            self.city = geodata.get('city', None)
+            self.region = geodata.get('region_name', None)
+            self.longitude = geodata.get('longitude', None)
+            self.latitude = geodata.get('latitude', None)
+            self.postal_code = geodata.get('postal_code', None)
+
         self.ip = ip
-        self.country = geodata.get('country_name', None)
-        self.country_code = geodata.get('country_code', None)
-        self.city = geodata.get('city', None)
-        self.region = geodata.get('region_name', None)
-        self.longitude = geodata.get('longitude', None)
-        self.latitude = geodata.get('latitude', None)
-        self.postal_code = geodata.get('postal_code', None)
         super(System, self).save()
         
     @property

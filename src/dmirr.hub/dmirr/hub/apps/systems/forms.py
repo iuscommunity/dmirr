@@ -8,11 +8,17 @@ from dmirr.hub import db
 class SystemForm(forms.ModelForm):
     class Meta:
         model = db.System
-        exclude = ['ip', 'longitude', 'latitude', 'country', 'city', 'region', 
+        exclude = ['ip', 'longitude', 'latitude',
                    'postal_code', 'country_code', 'online']
     
     user = forms.ModelChoiceField(queryset=db.User.objects.all(), widget=HiddenInput)
     label = forms.CharField(label="Hostname")
+
+    def __init__(self, *args, **kwargs):
+        super(SystemForm, self).__init__(*args, **kwargs)
+        self.fields['country'].required = False
+        self.fields['city'].required = False
+        self.fields['region'].required = False
 
     def save(self):
         super(SystemForm, self).save()
