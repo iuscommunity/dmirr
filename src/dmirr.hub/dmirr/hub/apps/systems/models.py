@@ -13,7 +13,7 @@ def hostname_resolves(hostname):
         ip = socket.gethostbyname(hostname)
     except socket.gaierror, e:
         raise ValidationError("Unresolvable hostname.  Proper DNS required.")
-        
+
 class System(models.Model):
     class Meta:
         db_table = 'systems'
@@ -54,8 +54,8 @@ class System(models.Model):
             # Attempt lookup using GeoPy
             geodata = get_geodata_by_region(*args)
             try:
-                self.longitude = geodata[1][0]
-                self.latitude = geodata[1][1]
+                self.latitude = geodata[1][0]
+                self.longitude = geodata[1][1]
             except IndexError, e:
                 raise IndexError("Unable to extract longitude and latitude from %s" % geodata)
 
