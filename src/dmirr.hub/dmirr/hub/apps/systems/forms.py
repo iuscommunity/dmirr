@@ -66,6 +66,7 @@ class SystemResourceForm(forms.ModelForm):
     system = forms.ModelChoiceField(queryset=db.System.objects.all(), widget=HiddenInput)
     
     def save(self):
-        self.instance.path = "/%s/" % self.instance.path.lstrip('/').rstrip('/')
+        if self.instance.path != "/":
+            self.instance.path = "/%s/" % self.instance.path.lstrip('/').rstrip('/')
         return super(SystemResourceForm, self).save()
-        
+
