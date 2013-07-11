@@ -57,10 +57,10 @@ def mirrorlist(request):
                 continue
             if protocol in resource.protocols.all() and \
                arch in repo.archs.all():
-                full_uri = "%s://%s/%s/%s/" % (
+                full_uri = "%s://%s%s%s/" % (
                     protocol.label, 
                     resource.system.label,
-                    resource.path.strip('/'),
+                    resource.path,
                     re.sub('@arch@', arch.label, repo.path.strip('/')),
                     )
                 if not client:
